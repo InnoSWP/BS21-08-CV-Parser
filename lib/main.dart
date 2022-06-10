@@ -1,4 +1,5 @@
 import 'package:cv_parser/pages/HomeScreen.dart';
+import 'package:cv_parser/pages/ParsedInformationScreen.dart';
 import 'package:flutter/material.dart';
 
 
@@ -21,7 +22,7 @@ class IExtract extends StatelessWidget {
       title: 'iExtract - Resume Parser',
 
       // HomeScreen
-      home: HomeScreen(),
+      home: ParsedInformationScreen(),
     );
   }
 }

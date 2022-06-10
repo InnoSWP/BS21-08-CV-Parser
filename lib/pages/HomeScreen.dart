@@ -1,10 +1,9 @@
+import 'package:cv_parser/pages/ParsedInformationScreen.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 // TO-DO:
-// 1. Add Google Fonts
-// 2. Add Hover effect to button "Add Resumes"
-// 3. fix history-decker alignments:
+// 1. fix history-decker alignments:
 //      a. the icon-button
 //      b. stacking them in the row
 //      c. fix scroll bar
@@ -25,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Color(0xffE8E8E8),
           child: Column(
             children: [
+              
               // Nav-Bar
               Container(
                 padding: EdgeInsets.fromLTRB(70, 8, 70, 8),
@@ -152,7 +152,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   minimumSize: Size(60, 50),
                                   elevation: 10,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(context, 
+                                  MaterialPageRoute(builder: (context) => const ParsedInformationScreen())
+                                  );
+                                },
                                 child: const Text("Add Resumes (CVs)",
                                     style: TextStyle(
                                         fontFamily: 'Eczar',
