@@ -85,150 +85,203 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
 
             // Mid-Part
             Container(
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Information-Section
-                  Container(
-                    color: Colors.blue,
-                    padding: EdgeInsets.fromLTRB(64, 27, 32, 36),
-                    width: 0.6 * MediaQuery.of(context).size.width,
-                    child: Column(
-                      children: [
-                        // Top-Heading
-                        Align(
-                            alignment: Alignment.center,
-                            child: Text("Parsed Information",
-                                style: TextStyle(
-                                    color: Color(0xff7A370B),
-                                    fontSize: 30,
-                                    fontFamily: 'Eczar',
-                                    fontWeight: FontWeight.w700))),
 
-                        // Basic-Information-Container
-                        Container(
-                          width: 900,
-                          height: 169,
-                          child: Row(
-                            children: [
-                              // basic-information
-                              Container(
-                                padding: EdgeInsets.fromLTRB(21, 8, 22, 21),
-                                width: 621,
-                                height: 169,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffF2EEE1),
-                                    borderRadius:
+                  Row(
+                    children: [
+                      // Information-Section
+                      Container(
+                        color: Color(0xffE8E8E8),
+                        padding: EdgeInsets.fromLTRB(64, 27, 32, 36),
+                        width: 0.6 * MediaQuery.of(context).size.width,
+                        child: Column(
+                          children: [
+                            // Top-Heading
+                            Align(
+                                alignment: Alignment.center,
+                                child: Text("Parsed Information",
+                                    style: TextStyle(
+                                        color: Color(0xff7A370B),
+                                        fontSize: 30,
+                                        fontFamily: 'Eczar',
+                                        fontWeight: FontWeight.w700))),
+
+                            // Basic-Information-Container
+                            Container(
+                              width: 900,
+                              height: 169,
+                              child: Row(
+                                children: [
+                                  // basic-information
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(21, 8, 22, 21),
+                                    width: 621,
+                                    height: 169,
+                                    decoration: BoxDecoration(
+                                        color: Color(0xffF2EEE1),
+                                        borderRadius:
                                         BorderRadius.all(Radius.circular(10))),
-                                child: Column(
-                                  children: [
-
-
-                                    // Name of Person
-                                    Container(
-                                      padding: EdgeInsets.fromLTRB(12, 7, 84, 8),
-                                        width: 575,
-                                        height: 43,
-                                        decoration: BoxDecoration(
-                                            color: Color(0xffFBFDF7),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10))),
-                                        child: Text(
-                                          "Albert Flores",
-                                          style: TextStyle(
-                                              fontFamily: 'Merriweather',
-                                              fontSize: 24),
-                                        )),
-
-                                    // information
-                                    Row(
+                                    child: Column(
                                       children: [
 
-                                        // Information 1
+
+                                        // Name of Person
                                         Container(
-                                          // margin: const EdgeInsets.only(top: 10),
-                                          child: Column(
-                                            children: [
+                                            padding: EdgeInsets.fromLTRB(12, 7, 84, 8),
+                                            width: 575,
+                                            height: 43,
+                                            decoration: BoxDecoration(
+                                                color: Color(0xffFBFDF7),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10))),
+                                            child: Text(
+                                              "Albert Flores",
+                                              style: TextStyle(
+                                                  fontFamily: 'Merriweather',
+                                                  fontSize: 24),
+                                            )),
+
+                                        // information
+                                        Row(
+                                          children: [
+
+                                            // Information 1
+                                            Container(
+                                              // margin: const EdgeInsets.only(top: 10),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children:[
+                                                  // contact-number
+                                                  Container(
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(Icons.phone, size: 22,),
+                                                        Text("  "),
+                                                        Text("(201) - 55 - 44", style: TextStyle(
+                                                          fontFamily: 'Merriweather',
+                                                          fontSize: 16,
+                                                        ),)
+                                                      ],
+                                                    ),
+                                                  ),
 
 
-                                              // contact-number
-                                              Container(
-                                                child: Row(
-                                                  children: [
-                                                    Icon(Icons.person, size: 22,),
-                                                    Text("  "),
-                                                    Text("(201) - 55 - 44", style: TextStyle(
-                                                      fontFamily: 'Merriweather',
-                                                      fontSize: 16,
-                                                    ),)
-                                                  ],
-                                                ),
+                                                  // Email-ID
+                                                  Container(
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(Icons.alternate_email, size: 22,),
+                                                        Text("  "),
+                                                        Text("bill.sanders@example.com", style: TextStyle(
+                                                          fontFamily: 'Merriweather',
+                                                          fontSize: 16,
+                                                        ),)
+                                                      ],
+                                                    ),
+                                                  ),
+
+                                                  // Git account
+                                                  Container(
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(Icons.person, size: 22,),
+                                                        Text("  "),
+                                                        Text("brownbear646", style: TextStyle(
+                                                          fontFamily: 'Merriweather',
+                                                          fontSize: 16,
+                                                        ),)
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-
-                                              
-                                              // Email-ID
-                                              Container(
-                                                child: Row(
-                                                  children: [
-                                                    Icon(Icons.alternate_email, size: 22,),
-                                                    Text("  "),
-                                                    Text("bill.sanders@example.com", style: TextStyle(
-                                                      fontFamily: 'Merriweather',
-                                                      fontSize: 16,
-                                                    ),)
-                                                  ],
-                                                ),
-                                              ),
+                                            ),
 
 
+                                            // Blank Line
+                                            Container(
+
+                                            ),
 
 
+                                            // Information 2
+                                            Container(
 
-                                            ],
-                                          ),
-                                        ),
+                                            ),
+                                          ],
 
-
-                                        // Blank Line
-                                        Container(
 
                                         ),
 
 
-                                        // Information 2
-                                        Container(
 
-                                        ),
                                       ],
-
-
                                     ),
+                                  ),
 
+                                  Container(
+                                    width: 12,
+                                    height: 169,
 
+                                  ),
 
-                                  ],
-                                ),
-                              ),
-
-                              Container(
-                                width: 12,
-                                height: 169,
-                              ),
-
-                              // profile-photo
-                              Container(
-                                width: 172,
-                                height: 169,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffF2EEE1),
-                                    borderRadius:
+                                  // profile-photo
+                                  Container(
+                                    width: 172,
+                                    height: 169,
+                                    decoration: BoxDecoration(
+                                        color: Color(0xffF2EEE1),
+                                        borderRadius:
                                         BorderRadius.all(Radius.circular(7.0))),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                  Container(
+                    width: 900,
+                    height: 350,
+                    color: Colors.black,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(65.0, 0.0, 25.0, 10.0),
+                      child: Column(
+
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Container(
+                              width: 900,
+                              height: 60,
+                              color: Colors.white,
+                              child: const Text(
+                                "Skills",
+                                style: TextStyle(
+                                  fontSize: 36,
+                                  color: Color(0xff864921),
+                                  fontFamily: 'Eczar',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                            ),
+                          ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Container(
+                              width: 900,
+                              height: 60,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
