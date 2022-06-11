@@ -182,7 +182,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Transform.rotate(
                       angle: 180 * math.pi / 180,
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          
+                        },
                         icon: Icon(
                           Icons.start,
                           size: 25,
@@ -197,291 +199,293 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       width: 800,
                       child: Scrollbar(
-                        child: SingleChildScrollView(
+                        child: ListView(
                           scrollDirection: Axis.horizontal,
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                // Jacob Jones
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
-                                  margin: EdgeInsets.all(10),
-                                  color: Color(0xffF2EEE1),
-                                  height: 164,
-                                  width: 148,
-                                  child: Stack(
-                                    children: [
-                                      // top cross icon
-                                      Align(
-                                        alignment: Alignment.topRight,
-                                        child: Icon(Icons.close,
-                                            size: 20, color: Color(0xff864921)),
-                                      ),
-
-                                      // center-document icon
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: Icon(
-                                          Icons.description,
-                                          size: 70,
-                                          color: Color(0xff4D6658),
+                          children: [
+                                Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  // Jacob Jones
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
+                                    margin: EdgeInsets.all(10),
+                                    color: Color(0xffF2EEE1),
+                                    height: 164,
+                                    width: 148,
+                                    child: Stack(
+                                      children: [
+                                        // top cross icon
+                                        Align(
+                                          alignment: Alignment.topRight,
+                                          child: Icon(Icons.close,
+                                              size: 20, color: Color(0xff864921)),
                                         ),
-                                      ),
 
-                                      // Bottom-text
-
-                                      Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Text("Jacob Jones",
-                                              style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontFamily: 'Archivo',
-                                                  fontWeight:
-                                                      FontWeight.bold))),
-                                    ],
-                                  ),
-                                ),
-
-                                // Albert Flores
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
-                                  margin: EdgeInsets.all(10),
-                                  color: Color(0xffF2EEE1),
-                                  height: 164,
-                                  width: 148,
-                                  child: Stack(
-                                    children: [
-                                      // top cross icon
-                                      Align(
-                                        alignment: Alignment.topRight,
-                                        child: Icon(Icons.close,
-                                            size: 20, color: Color(0xff864921)),
-                                      ),
-
-                                      // center-document icon
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: Icon(
-                                          Icons.description,
-                                          size: 70,
-                                          color: Color(0xff4D6658),
+                                        // center-document icon
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Icon(
+                                            Icons.description,
+                                            size: 70,
+                                            color: Color(0xff4D6658),
+                                          ),
                                         ),
-                                      ),
 
-                                      // Bottom-text
+                                        // Bottom-text
 
-                                      Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Text("Albert Flores",
-                                              style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontFamily: 'Archivo',
-                                                  fontWeight:
-                                                      FontWeight.bold))),
-                                    ],
+                                        Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Text("Jacob Jones",
+                                                style: TextStyle(
+                                                    fontSize: 13,
+                                                    fontFamily: 'Archivo',
+                                                    fontWeight:
+                                                        FontWeight.bold))),
+                                      ],
+                                    ),
                                   ),
-                                ),
 
-                                // Devon Lane
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
-                                  margin: EdgeInsets.all(10),
-                                  color: Color(0xffF2EEE1),
-                                  height: 164,
-                                  width: 148,
-                                  child: Stack(
-                                    children: [
-                                      // top cross icon
-                                      Align(
-                                        alignment: Alignment.topRight,
-                                        child: Icon(Icons.close,
-                                            size: 20, color: Color(0xff864921)),
-                                      ),
-
-                                      // center-document icon
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: Icon(
-                                          Icons.description,
-                                          size: 70,
-                                          color: Color(0xff4D6658),
+                                  // Albert Flores
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
+                                    margin: EdgeInsets.all(10),
+                                    color: Color(0xffF2EEE1),
+                                    height: 164,
+                                    width: 148,
+                                    child: Stack(
+                                      children: [
+                                        // top cross icon
+                                        Align(
+                                          alignment: Alignment.topRight,
+                                          child: Icon(Icons.close,
+                                              size: 20, color: Color(0xff864921)),
                                         ),
-                                      ),
 
-                                      // Bottom-text
-
-                                      Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Text("Devon Lane",
-                                              style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontFamily: 'Archivo',
-                                                  fontWeight:
-                                                      FontWeight.bold))),
-                                    ],
-                                  ),
-                                ),
-
-                                // Cameron Williamson
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
-                                  margin: EdgeInsets.all(10),
-                                  color: Color(0xffF2EEE1),
-                                  height: 164,
-                                  width: 148,
-                                  child: Stack(
-                                    children: [
-                                      // top cross icon
-                                      Align(
-                                        alignment: Alignment.topRight,
-                                        child: Icon(Icons.close,
-                                            size: 20, color: Color(0xff864921)),
-                                      ),
-
-                                      // center-document icon
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: Icon(
-                                          Icons.description,
-                                          size: 70,
-                                          color: Color(0xff4D6658),
+                                        // center-document icon
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Icon(
+                                            Icons.description,
+                                            size: 70,
+                                            color: Color(0xff4D6658),
+                                          ),
                                         ),
-                                      ),
 
-                                      // Bottom-text
+                                        // Bottom-text
 
-                                      Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Text("Cameron Williamson",
-                                              style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontFamily: 'Archivo',
-                                                  fontWeight:
-                                                      FontWeight.bold))),
-                                    ],
+                                        Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Text("Albert Flores",
+                                                style: TextStyle(
+                                                    fontSize: 13,
+                                                    fontFamily: 'Archivo',
+                                                    fontWeight:
+                                                        FontWeight.bold))),
+                                      ],
+                                    ),
                                   ),
-                                ),
 
-                                // Aditya Singh
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
-                                  margin: EdgeInsets.all(10),
-                                  color: Color(0xffF2EEE1),
-                                  height: 164,
-                                  width: 148,
-                                  child: Stack(
-                                    children: [
-                                      // top cross icon
-                                      Align(
-                                        alignment: Alignment.topRight,
-                                        child: Icon(Icons.close,
-                                            size: 20, color: Color(0xff864921)),
-                                      ),
-
-                                      // center-document icon
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: Icon(
-                                          Icons.description,
-                                          size: 70,
-                                          color: Color(0xff4D6658),
+                                  // Devon Lane
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
+                                    margin: EdgeInsets.all(10),
+                                    color: Color(0xffF2EEE1),
+                                    height: 164,
+                                    width: 148,
+                                    child: Stack(
+                                      children: [
+                                        // top cross icon
+                                        Align(
+                                          alignment: Alignment.topRight,
+                                          child: Icon(Icons.close,
+                                              size: 20, color: Color(0xff864921)),
                                         ),
-                                      ),
 
-                                      // Bottom-text
-
-                                      Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Text("Aditya Singh",
-                                              style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontFamily: 'Archivo',
-                                                  fontWeight:
-                                                      FontWeight.bold))),
-                                    ],
-                                  ),
-                                ),
-
-                                // Dwight Schrute
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
-                                  margin: EdgeInsets.all(10),
-                                  color: Color(0xffF2EEE1),
-                                  height: 164,
-                                  width: 148,
-                                  child: Stack(
-                                    children: [
-                                      // top cross icon
-                                      Align(
-                                        alignment: Alignment.topRight,
-                                        child: Icon(Icons.close,
-                                            size: 20, color: Color(0xff864921)),
-                                      ),
-
-                                      // center-document icon
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: Icon(
-                                          Icons.description,
-                                          size: 70,
-                                          color: Color(0xff4D6658),
+                                        // center-document icon
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Icon(
+                                            Icons.description,
+                                            size: 70,
+                                            color: Color(0xff4D6658),
+                                          ),
                                         ),
-                                      ),
 
-                                      // Bottom-text
+                                        // Bottom-text
 
-                                      Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Text("Dwight Schrute",
-                                              style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontFamily: 'Archivo',
-                                                  fontWeight:
-                                                      FontWeight.bold))),
-                                    ],
+                                        Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Text("Devon Lane",
+                                                style: TextStyle(
+                                                    fontSize: 13,
+                                                    fontFamily: 'Archivo',
+                                                    fontWeight:
+                                                        FontWeight.bold))),
+                                      ],
+                                    ),
                                   ),
-                                ),
 
-                                // Michael Scott
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
-                                  margin: EdgeInsets.all(10),
-                                  color: Color(0xffF2EEE1),
-                                  height: 164,
-                                  width: 148,
-                                  child: Stack(
-                                    children: [
-                                      // top cross icon
-                                      Align(
-                                        alignment: Alignment.topRight,
-                                        child: Icon(Icons.close,
-                                            size: 20, color: Color(0xff864921)),
-                                      ),
-
-                                      // center-document icon
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: Icon(
-                                          Icons.description,
-                                          size: 70,
-                                          color: Color(0xff4D6658),
+                                  // Cameron Williamson
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
+                                    margin: EdgeInsets.all(10),
+                                    color: Color(0xffF2EEE1),
+                                    height: 164,
+                                    width: 148,
+                                    child: Stack(
+                                      children: [
+                                        // top cross icon
+                                        Align(
+                                          alignment: Alignment.topRight,
+                                          child: Icon(Icons.close,
+                                              size: 20, color: Color(0xff864921)),
                                         ),
-                                      ),
 
-                                      // Bottom-text
+                                        // center-document icon
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Icon(
+                                            Icons.description,
+                                            size: 70,
+                                            color: Color(0xff4D6658),
+                                          ),
+                                        ),
 
-                                      Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Text("Michael Scott",
-                                              style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontFamily: 'Archivo',
-                                                  fontWeight:
-                                                      FontWeight.bold))),
-                                    ],
+                                        // Bottom-text
+
+                                        Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Text("Cameron Williamson",
+                                                style: TextStyle(
+                                                    fontSize: 13,
+                                                    fontFamily: 'Archivo',
+                                                    fontWeight:
+                                                        FontWeight.bold))),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ]),
+
+                                  // Aditya Singh
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
+                                    margin: EdgeInsets.all(10),
+                                    color: Color(0xffF2EEE1),
+                                    height: 164,
+                                    width: 148,
+                                    child: Stack(
+                                      children: [
+                                        // top cross icon
+                                        Align(
+                                          alignment: Alignment.topRight,
+                                          child: Icon(Icons.close,
+                                              size: 20, color: Color(0xff864921)),
+                                        ),
+
+                                        // center-document icon
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Icon(
+                                            Icons.description,
+                                            size: 70,
+                                            color: Color(0xff4D6658),
+                                          ),
+                                        ),
+
+                                        // Bottom-text
+
+                                        Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Text("Aditya Singh",
+                                                style: TextStyle(
+                                                    fontSize: 13,
+                                                    fontFamily: 'Archivo',
+                                                    fontWeight:
+                                                        FontWeight.bold))),
+                                      ],
+                                    ),
+                                  ),
+
+                                  // Dwight Schrute
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
+                                    margin: EdgeInsets.all(10),
+                                    color: Color(0xffF2EEE1),
+                                    height: 164,
+                                    width: 148,
+                                    child: Stack(
+                                      children: [
+                                        // top cross icon
+                                        Align(
+                                          alignment: Alignment.topRight,
+                                          child: Icon(Icons.close,
+                                              size: 20, color: Color(0xff864921)),
+                                        ),
+
+                                        // center-document icon
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Icon(
+                                            Icons.description,
+                                            size: 70,
+                                            color: Color(0xff4D6658),
+                                          ),
+                                        ),
+
+                                        // Bottom-text
+
+                                        Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Text("Dwight Schrute",
+                                                style: TextStyle(
+                                                    fontSize: 13,
+                                                    fontFamily: 'Archivo',
+                                                    fontWeight:
+                                                        FontWeight.bold))),
+                                      ],
+                                    ),
+                                  ),
+
+                                  // Michael Scott
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
+                                    margin: EdgeInsets.all(10),
+                                    color: Color(0xffF2EEE1),
+                                    height: 164,
+                                    width: 148,
+                                    child: Stack(
+                                      children: [
+                                        // top cross icon
+                                        Align(
+                                          alignment: Alignment.topRight,
+                                          child: Icon(Icons.close,
+                                              size: 20, color: Color(0xff864921)),
+                                        ),
+
+                                        // center-document icon
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Icon(
+                                            Icons.description,
+                                            size: 70,
+                                            color: Color(0xff4D6658),
+                                          ),
+                                        ),
+
+                                        // Bottom-text
+
+                                        Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Text("Michael Scott",
+                                                style: TextStyle(
+                                                    fontSize: 13,
+                                                    fontFamily: 'Archivo',
+                                                    fontWeight:
+                                                        FontWeight.bold))),
+                                      ],
+                                    ),
+                                  ),
+                                ]),
+                              ],
                         ),
                       ),
                     ),
