@@ -15,7 +15,31 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+class ResumeCards {
+  final String name;
+
+  const ResumeCards({
+    required this.name,
+  });
+}
+
 class _HomeScreenState extends State<HomeScreen> {
+  List<ResumeCards> items = [
+    ResumeCards(name: "Jacob Jones"),
+    ResumeCards(name: "Albert Flores"),
+    ResumeCards(name: "Devon Lane"),
+    ResumeCards(name: "Cameron Williamson"),
+    ResumeCards(name: "Aditya Singh"),
+    ResumeCards(name: "Dwight Schrute"),
+    ResumeCards(name: "Michael Scott"),
+  ];
+
+  List<ResumeCards> startItems = [];
+  List<ResumeCards> endItems = [];
+
+  int startIndex = 0;
+  int endIndex = 4;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Color(0xffE8E8E8),
           child: Column(
             children: [
-              
               // Nav-Bar
               Container(
                 padding: EdgeInsets.fromLTRB(70, 8, 70, 8),
@@ -153,9 +176,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   elevation: 10,
                                 ),
                                 onPressed: () {
-                                  Navigator.push(context, 
-                                  MaterialPageRoute(builder: (context) => const ParsedInformationScreen())
-                                  );
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ParsedInformationScreen()));
                                 },
                                 child: const Text("Add Resumes (CVs)",
                                     style: TextStyle(
@@ -179,11 +204,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    
+                    
                     Transform.rotate(
                       angle: 180 * math.pi / 180,
                       child: IconButton(
                         onPressed: () {
-                          
+                          if (startIndex > 0) {
+                            items.insert(
+                                0, startItems.elementAt(startIndex - 1));
+                                print(startItems[startIndex - 1].name);
+                            // for(int i = 0; i < items.length; i++) {
+                            //   print(items[i]);
+                            // }
+                            startItems.removeAt(startIndex - 1);
+                            startIndex--;
+                            endIndex--;
+                          }
+                          setState(() {});
                         },
                         icon: Icon(
                           Icons.start,
@@ -197,301 +235,34 @@ class _HomeScreenState extends State<HomeScreen> {
                     // ************************** //
                     // Resume Containers //
                     Container(
-                      width: 800,
-                      child: Scrollbar(
-                        child: ListView(
+                      width: 900,
+                      child: SizedBox(
+                        height: 140,
+                        child: ListView.separated(
                           scrollDirection: Axis.horizontal,
-                          children: [
-                                Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  // Jacob Jones
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
-                                    margin: EdgeInsets.all(10),
-                                    color: Color(0xffF2EEE1),
-                                    height: 164,
-                                    width: 148,
-                                    child: Stack(
-                                      children: [
-                                        // top cross icon
-                                        Align(
-                                          alignment: Alignment.topRight,
-                                          child: Icon(Icons.close,
-                                              size: 20, color: Color(0xff864921)),
-                                        ),
+                          // mainAxisAlignment: MainAxisAlignment.start,
+                          itemCount: items.length,
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(width: 12);
+                          },
 
-                                        // center-document icon
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: Icon(
-                                            Icons.description,
-                                            size: 70,
-                                            color: Color(0xff4D6658),
-                                          ),
-                                        ),
-
-                                        // Bottom-text
-
-                                        Align(
-                                            alignment: Alignment.bottomCenter,
-                                            child: Text("Jacob Jones",
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    fontFamily: 'Archivo',
-                                                    fontWeight:
-                                                        FontWeight.bold))),
-                                      ],
-                                    ),
-                                  ),
-
-                                  // Albert Flores
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
-                                    margin: EdgeInsets.all(10),
-                                    color: Color(0xffF2EEE1),
-                                    height: 164,
-                                    width: 148,
-                                    child: Stack(
-                                      children: [
-                                        // top cross icon
-                                        Align(
-                                          alignment: Alignment.topRight,
-                                          child: Icon(Icons.close,
-                                              size: 20, color: Color(0xff864921)),
-                                        ),
-
-                                        // center-document icon
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: Icon(
-                                            Icons.description,
-                                            size: 70,
-                                            color: Color(0xff4D6658),
-                                          ),
-                                        ),
-
-                                        // Bottom-text
-
-                                        Align(
-                                            alignment: Alignment.bottomCenter,
-                                            child: Text("Albert Flores",
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    fontFamily: 'Archivo',
-                                                    fontWeight:
-                                                        FontWeight.bold))),
-                                      ],
-                                    ),
-                                  ),
-
-                                  // Devon Lane
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
-                                    margin: EdgeInsets.all(10),
-                                    color: Color(0xffF2EEE1),
-                                    height: 164,
-                                    width: 148,
-                                    child: Stack(
-                                      children: [
-                                        // top cross icon
-                                        Align(
-                                          alignment: Alignment.topRight,
-                                          child: Icon(Icons.close,
-                                              size: 20, color: Color(0xff864921)),
-                                        ),
-
-                                        // center-document icon
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: Icon(
-                                            Icons.description,
-                                            size: 70,
-                                            color: Color(0xff4D6658),
-                                          ),
-                                        ),
-
-                                        // Bottom-text
-
-                                        Align(
-                                            alignment: Alignment.bottomCenter,
-                                            child: Text("Devon Lane",
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    fontFamily: 'Archivo',
-                                                    fontWeight:
-                                                        FontWeight.bold))),
-                                      ],
-                                    ),
-                                  ),
-
-                                  // Cameron Williamson
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
-                                    margin: EdgeInsets.all(10),
-                                    color: Color(0xffF2EEE1),
-                                    height: 164,
-                                    width: 148,
-                                    child: Stack(
-                                      children: [
-                                        // top cross icon
-                                        Align(
-                                          alignment: Alignment.topRight,
-                                          child: Icon(Icons.close,
-                                              size: 20, color: Color(0xff864921)),
-                                        ),
-
-                                        // center-document icon
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: Icon(
-                                            Icons.description,
-                                            size: 70,
-                                            color: Color(0xff4D6658),
-                                          ),
-                                        ),
-
-                                        // Bottom-text
-
-                                        Align(
-                                            alignment: Alignment.bottomCenter,
-                                            child: Text("Cameron Williamson",
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    fontFamily: 'Archivo',
-                                                    fontWeight:
-                                                        FontWeight.bold))),
-                                      ],
-                                    ),
-                                  ),
-
-                                  // Aditya Singh
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
-                                    margin: EdgeInsets.all(10),
-                                    color: Color(0xffF2EEE1),
-                                    height: 164,
-                                    width: 148,
-                                    child: Stack(
-                                      children: [
-                                        // top cross icon
-                                        Align(
-                                          alignment: Alignment.topRight,
-                                          child: Icon(Icons.close,
-                                              size: 20, color: Color(0xff864921)),
-                                        ),
-
-                                        // center-document icon
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: Icon(
-                                            Icons.description,
-                                            size: 70,
-                                            color: Color(0xff4D6658),
-                                          ),
-                                        ),
-
-                                        // Bottom-text
-
-                                        Align(
-                                            alignment: Alignment.bottomCenter,
-                                            child: Text("Aditya Singh",
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    fontFamily: 'Archivo',
-                                                    fontWeight:
-                                                        FontWeight.bold))),
-                                      ],
-                                    ),
-                                  ),
-
-                                  // Dwight Schrute
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
-                                    margin: EdgeInsets.all(10),
-                                    color: Color(0xffF2EEE1),
-                                    height: 164,
-                                    width: 148,
-                                    child: Stack(
-                                      children: [
-                                        // top cross icon
-                                        Align(
-                                          alignment: Alignment.topRight,
-                                          child: Icon(Icons.close,
-                                              size: 20, color: Color(0xff864921)),
-                                        ),
-
-                                        // center-document icon
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: Icon(
-                                            Icons.description,
-                                            size: 70,
-                                            color: Color(0xff4D6658),
-                                          ),
-                                        ),
-
-                                        // Bottom-text
-
-                                        Align(
-                                            alignment: Alignment.bottomCenter,
-                                            child: Text("Dwight Schrute",
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    fontFamily: 'Archivo',
-                                                    fontWeight:
-                                                        FontWeight.bold))),
-                                      ],
-                                    ),
-                                  ),
-
-                                  // Michael Scott
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
-                                    margin: EdgeInsets.all(10),
-                                    color: Color(0xffF2EEE1),
-                                    height: 164,
-                                    width: 148,
-                                    child: Stack(
-                                      children: [
-                                        // top cross icon
-                                        Align(
-                                          alignment: Alignment.topRight,
-                                          child: Icon(Icons.close,
-                                              size: 20, color: Color(0xff864921)),
-                                        ),
-
-                                        // center-document icon
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: Icon(
-                                            Icons.description,
-                                            size: 70,
-                                            color: Color(0xff4D6658),
-                                          ),
-                                        ),
-
-                                        // Bottom-text
-
-                                        Align(
-                                            alignment: Alignment.bottomCenter,
-                                            child: Text("Michael Scott",
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    fontFamily: 'Archivo',
-                                                    fontWeight:
-                                                        FontWeight.bold))),
-                                      ],
-                                    ),
-                                  ),
-                                ]),
-                              ],
+                          itemBuilder: (BuildContext context, int index) {
+                            return buildCard(items[index]);
+                          },
                         ),
                       ),
                     ),
 
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (endIndex < items.length && items.length > 5) {
+                          startItems.add(items.elementAt(0));
+                          items.removeAt(0);
+                          startIndex++;
+                          endIndex++;
+                        }
+                        setState(() {});
+                      },
                       icon: Icon(
                         Icons.start,
                         size: 25,
@@ -516,9 +287,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: EdgeInsets.fromLTRB(70, 20, 70, 10),
                 child: const Text("© iExtract 2022 - Your AI Assistant",
                     style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.black,
-                        fontFamily: 'Archivo',)),
+                      fontSize: 12,
+                      color: Colors.black,
+                      fontFamily: 'Archivo',
+                    )),
               ),
             ],
           ),
@@ -526,4 +298,44 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  Widget buildCard(ResumeCards resume) => Container(
+        padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
+        margin: EdgeInsets.all(10),
+        color: Color(0xffF2EEE1),
+        height: 164,
+        width: 148,
+        child: Stack(
+          children: [
+            // top cross icon
+            Align(
+              alignment: Alignment.topRight,
+              child: Icon(Icons.close, size: 20, color: Color(0xff864921)),
+            ),
+
+            // center-document icon
+            Align(
+              alignment: Alignment.center,
+              child: InkWell(
+                child: Icon(
+                  Icons.description,
+                  size: 70,
+                  color: Color(0xff4D6658),
+                ),
+                onTap: () {},
+              ),
+            ),
+
+            // Bottom-text
+
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(resume.name,
+                    style: TextStyle(
+                        fontSize: 13,
+                        fontFamily: 'Archivo',
+                        fontWeight: FontWeight.bold))),
+          ],
+        ),
+      );
 }
