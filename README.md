@@ -8,7 +8,7 @@
 
  - Zeyad Algamy - Back-end Developer & UI/UX Researcher  
  - Khush Patel - Front-end Developer & UI/UX Researcher  
- - Moaid Hashem - UI/UX Researcher  
+ - Moaid Hashem - Front-end Developer  
  - Tanmay Sharma - Front-end Developer & UI/UX Researcher  
  - Roukaya Mobraouk - Front-end Developer  
  - Ahmed Soliman - Backend Developer  
