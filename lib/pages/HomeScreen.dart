@@ -1,14 +1,18 @@
+import 'package:cv_parser/pages/AboutScreen.dart';
+import 'package:cv_parser/pages/ContactScreen.dart';
 import 'package:cv_parser/pages/ParsedInformationScreen.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-// TO-DO:
-// 1. fix history-decker alignments:
-//      a. the icon-button
-//      b. stacking them in the row
-//      c. fix scroll bar
-
 class HomeScreen extends StatefulWidget {
+
+  static PageRouteBuilder getRoute() {
+    return PageRouteBuilder(pageBuilder: (_, __, ___) {
+      return HomeScreen();
+    });
+
+  }
+  
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -24,6 +28,7 @@ class ResumeCards {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  
   List<ResumeCards> items = [
     ResumeCards(name: "Jacob Jones"),
     ResumeCards(name: "Albert Flores"),
@@ -48,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Color(0xffE8E8E8),
           child: Column(
             children: [
+              
               // Nav-Bar
               Container(
                 padding: EdgeInsets.fromLTRB(70, 8, 70, 8),
@@ -89,14 +95,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fontFamily: 'Merriweather',
                                   ))),
                           TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(context, ContactScreen.getRoute());
+                              },
                               child: const Text("Contact",
                                   style: TextStyle(
                                       fontSize: 16,
                                       color: Color(0xff894621),
                                       fontFamily: 'Merriweather'))),
                           TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(context, AboutScreen.getRoute());
+                              },
                               child: const Text("About",
                                   style: TextStyle(
                                       fontSize: 16,
@@ -213,10 +223,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (startIndex > 0) {
                             items.insert(
                                 0, startItems.elementAt(startIndex - 1));
-                                print(startItems[startIndex - 1].name);
-                            // for(int i = 0; i < items.length; i++) {
-                            //   print(items[i]);
-                            // }
                             startItems.removeAt(startIndex - 1);
                             startIndex--;
                             endIndex--;

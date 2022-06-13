@@ -1,3 +1,4 @@
+import 'package:cv_parser/pages/HomeScreen.dart';
 import 'package:cv_parser/pages/ParsedInformationScreen.dart';
 import 'package:cv_parser/pages/AboutScreen.dart';
 import 'package:cv_parser/pages/ContactScreen.dart';
@@ -5,6 +6,12 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 class AboutScreen extends StatefulWidget {
+  static PageRouteBuilder getRoute() {
+    return PageRouteBuilder(pageBuilder: (_, __, ___) {
+      return AboutScreen();
+    });
+  }
+
   const AboutScreen({Key? key}) : super(key: key);
 
   @override
@@ -17,10 +24,9 @@ class _AboutScreenState extends State<AboutScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          color: Color(0xffE8E8E8),
+          color: Color(0xffF8F8F8),
           child: Column(
             children: [
-              
               // Nav-Bar
               Container(
                 padding: EdgeInsets.fromLTRB(70, 8, 70, 8),
@@ -54,7 +60,9 @@ class _AboutScreenState extends State<AboutScreen> {
                       child: Row(
                         children: [
                           TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(context, HomeScreen.getRoute());
+                              },
                               child: const Text("Home",
                                   style: TextStyle(
                                     fontSize: 16,
@@ -62,20 +70,22 @@ class _AboutScreenState extends State<AboutScreen> {
                                     fontFamily: 'Merriweather',
                                   ))),
                           TextButton(
-                              onPressed: () {},
-                              child: const Text("About",
+                              onPressed: () {
+                                Navigator.push(
+                                    context, ContactScreen.getRoute());
+                              },
+                              child: const Text("Contact",
                                   style: TextStyle(
                                       fontSize: 16,
                                       color: Color(0xff894621),
                                       fontFamily: 'Merriweather'))),
                           TextButton(
                               onPressed: () {},
-                              child: const Text("Contact",
+                              child: const Text("About",
                                   style: TextStyle(
                                       fontSize: 16,
                                       color: Color(0xff894621),
                                       fontFamily: 'Merriweather'))),
-                         
                         ],
                       ),
                     ),
@@ -83,7 +93,7 @@ class _AboutScreenState extends State<AboutScreen> {
                 ),
               ),
 
-                // Top-Container
+              // Top-Container
               Container(
                 height: 290,
                 width: MediaQuery.of(context).size.width,
@@ -112,42 +122,56 @@ class _AboutScreenState extends State<AboutScreen> {
                   ],
                 ),
               ),
- 
 
-            // Middle-Container
+              // Middle-Container
               Container(
-                height: 417,
+                height: 600,
                 width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.fromLTRB(10, 100, 10, 100), 
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "CV Parser Your AI Asistant",
-                      style: TextStyle(
-                          fontSize: 50,
-                          color: Color(0xff4D6658),
-                          fontFamily: 'Eczar',
-                          fontWeight: FontWeight.w700),
-                      textAlign: TextAlign.center,
+                padding: EdgeInsets.fromLTRB(0, 60, 0, 40),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [ 
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+
+                        Container(
+                          width: 300,
+                          child: const Text(
+                            "CV Parser Your AI Asistant",
+                            style: TextStyle(
+                                fontSize: 40,
+                                color: Color(0xff4D6658),
+                                fontFamily: 'Eczar',
+                                fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        const Text(
+                          "Cv Parser is my name At your fingertips, available 24 hours a day, \n 7 Days a week, whenever you need me. Resumes are something I \n Love eating. So, as a thank you, I will offer you with Json files of \n the Resimes If you gift me Resumes.",
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Color(0xff4D6658),
+                              fontFamily: 'Eczar'),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                  ),
                     ),
-                    const Text(
-                      "Cv Parser is my name At your fingertips, available 24 hours a day, \n 7 Days a week, whenever you need me. Resumes are something I \n Love eating. So, as a thank you, I will offer you with Json files of \n the Resimes If you gift me Resumes.",
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Color(0xff4D6658),
-                          fontFamily: 'Eczar'),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: Image.asset('images/about_image.jpg')),
+
+                  ]
                 ),
               ),
 
-              
-
               // Blank Rectangle
               Container(
-                height: 38,
+                height: 5,
               ),
 
               // Footer
@@ -158,9 +182,10 @@ class _AboutScreenState extends State<AboutScreen> {
                 padding: EdgeInsets.fromLTRB(70, 20, 70, 10),
                 child: const Text("© iExtract 2022 - Your AI Assistant",
                     style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.black,
-                        fontFamily: 'Archivo',)),
+                      fontSize: 12,
+                      color: Colors.black,
+                      fontFamily: 'Archivo',
+                    )),
               ),
             ],
           ),

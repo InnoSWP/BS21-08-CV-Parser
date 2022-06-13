@@ -1,8 +1,19 @@
+import 'package:cv_parser/pages/AboutScreen.dart';
+import 'package:cv_parser/pages/ContactScreen.dart';
+import 'package:cv_parser/pages/HomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class ParsedInformationScreen extends StatefulWidget {
+
+  static PageRouteBuilder getRoute() {
+    return PageRouteBuilder(pageBuilder: (_, __, ___) {
+      return ParsedInformationScreen();
+    });
+
+  }
+
   const ParsedInformationScreen({Key? key}) : super(key: key);
 
   @override
@@ -54,7 +65,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                       children: [
                         TextButton(
                             onPressed: () {
-                              Navigator.pop(context);
+                              Navigator.push(context, HomeScreen.getRoute());
                             },
                             child: const Text("Home",
                                 style: TextStyle(
@@ -63,14 +74,18 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                   fontFamily: 'Merriweather',
                                 ))),
                         TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(context, ContactScreen.getRoute());
+                            },
                             child: const Text("Contact",
                                 style: TextStyle(
                                     fontSize: 16,
                                     color: Color(0xff894621),
                                     fontFamily: 'Merriweather'))),
                         TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(context, AboutScreen.getRoute());
+                            },
                             child: const Text("About",
                                 style: TextStyle(
                                     fontSize: 16,
