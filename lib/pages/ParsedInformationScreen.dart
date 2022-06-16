@@ -24,6 +24,11 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
   // AnimationController? _controller;
   // Animation<double>? _animation;
 
+  double expandedHeight = 152;
+  double closedHeight = 52;
+
+  List<String> currentList = [];
+
   List<ResumeCards> items = [
     ResumeCards(name: "Jacob Jones"),
     ResumeCards(name: "Albert Flores"),
@@ -32,7 +37,39 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
     ResumeCards(name: "Aditya Singh"),
     ResumeCards(name: "Dwight Schrute"),
     ResumeCards(name: "Michael Scott"),
+    ResumeCards(name: "Jim Halpert"),
+    ResumeCards(name: "Pam Beesly"),
+    ResumeCards(name: "Andy Bernard"),
+    ResumeCards(name: "Kelly Kapoor"),
   ];
+
+  List<String> SkillsItems = [
+    "Active listening skills",
+    "Communication Skills",
+    "Java language"
+  ];
+
+  List<String> OrganizationsItems = [
+    "Innopolis University",
+    "Innopolis High School"
+  ];
+
+  List<String> LanguagesItems = ["Java", "C++", "DOT Net"];
+
+  List<String> CountriesItems = ["Russia", "Ukraine", "America"];
+
+  List<String> PublicationsItems = [
+    "Penguin House Publications",
+    "Hallen Publication"
+  ];
+
+  List<String> LinksItems = ["https://www.dambase.com/"];
+
+  List<bool> visiblitiyValues = [false, false, false, false, false, false];
+
+  List<double> heightValues = [52, 52, 52, 52, 52, 52];
+
+  List<double> angleValues = [270, 270, 270, 270, 270, 270];
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +182,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                     // top-basic-information
                                     Container(
                                       padding:
-                                      EdgeInsets.fromLTRB(21, 8, 22, 21),
+                                          EdgeInsets.fromLTRB(21, 8, 22, 21),
                                       width: 621,
                                       height: 169,
                                       decoration: BoxDecoration(
@@ -164,8 +201,8 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                               decoration: BoxDecoration(
                                                   color: Color(0xffFBFDF7),
                                                   borderRadius:
-                                                  BorderRadius.all(
-                                                      Radius.circular(10))),
+                                                      BorderRadius.all(
+                                                          Radius.circular(10))),
                                               child: Text(
                                                 "Albert Flores",
                                                 style: TextStyle(
@@ -182,7 +219,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                 margin: EdgeInsets.all(10),
                                                 child: Column(
                                                   crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     // contact-number
                                                     Container(
@@ -197,7 +234,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                             "(201) - 55 - 44",
                                                             style: TextStyle(
                                                               fontFamily:
-                                                              'Merriweather',
+                                                                  'Merriweather',
                                                               fontSize: 16,
                                                             ),
                                                           )
@@ -219,7 +256,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                             "bill.sanders@example.com",
                                                             style: TextStyle(
                                                               fontFamily:
-                                                              'Merriweather',
+                                                                  'Merriweather',
                                                               fontSize: 16,
                                                             ),
                                                           )
@@ -240,7 +277,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                             "brownbear646",
                                                             style: TextStyle(
                                                               fontFamily:
-                                                              'Merriweather',
+                                                                  'Merriweather',
                                                               fontSize: 16,
                                                             ),
                                                           )
@@ -265,7 +302,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                 // margin: EdgeInsets.all(2),
                                                 child: Column(
                                                   crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Container(
                                                       child: Row(
@@ -279,7 +316,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                             "redkoala509",
                                                             style: TextStyle(
                                                               fontFamily:
-                                                              'Merriweather',
+                                                                  'Merriweather',
                                                               fontSize: 16,
                                                             ),
                                                           )
@@ -323,21 +360,22 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                 color: Color(0xffE8E8E8),
                                 child: Column(
                                   children: [
+                                    getParsedInformationContainer("Skills"),
 
-                                    buildDeck("Skills"),
+                                    getParsedInformationContainer(
+                                        "Organizations"),
 
-                                    buildDeck("Organizations"),
+                                    getParsedInformationContainer("Languages"),
 
-                                    buildDeck("Languages"),
+                                    getParsedInformationContainer("Countries"),
 
-                                    buildDeck("Countries"),
+                                    getParsedInformationContainer(
+                                        "Publications"),
 
-                                    buildDeck("Publications"),
-
-                                    buildDeck("Links"),
+                                    getParsedInformationContainer("Links"),
 
                                     Container(
-                                      height: 200,
+                                      height: 100,
                                     ),
 
                                     // Export CVs
@@ -418,19 +456,19 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                         decoration: BoxDecoration(
                                           color: Color(0xffFEFDFE),
                                           borderRadius:
-                                          BorderRadius.circular(20),
+                                              BorderRadius.circular(20),
                                           boxShadow: [
                                             BoxShadow(
                                               color: Colors.grey,
                                               offset:
-                                              Offset(0.0, 1.0), // (x, y)
+                                                  Offset(0.0, 1.0), // (x, y)
                                               blurRadius: 6.0,
                                             )
                                           ],
                                         ),
                                         child: Row(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               // TextField
                                               Container(
@@ -444,31 +482,31 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                   ),
                                                   decoration: InputDecoration(
                                                     contentPadding:
-                                                    EdgeInsets.all(5),
+                                                        EdgeInsets.all(5),
                                                     // suffixIcon: Icon(Icons.search_off_outlined, size: 30, color: Color(0xff864921),),
                                                     // filled: true,
                                                     hintText: "Search CVs....",
                                                     enabledBorder:
-                                                    OutlineInputBorder(
+                                                        OutlineInputBorder(
                                                       borderSide:
-                                                      const BorderSide(
-                                                          width: 0,
-                                                          color: Color(
-                                                              0xffFEFDFE)),
+                                                          const BorderSide(
+                                                              width: 0,
+                                                              color: Color(
+                                                                  0xffFEFDFE)),
                                                       borderRadius:
-                                                      BorderRadius.circular(
-                                                          10),
+                                                          BorderRadius.circular(
+                                                              10),
                                                     ),
                                                     focusedBorder:
-                                                    OutlineInputBorder(
+                                                        OutlineInputBorder(
                                                       borderSide:
-                                                      const BorderSide(
-                                                          width: 0,
-                                                          color: Color(
-                                                              0xffFEFDFE)),
+                                                          const BorderSide(
+                                                              width: 0,
+                                                              color: Color(
+                                                                  0xffFEFDFE)),
                                                       borderRadius:
-                                                      BorderRadius.circular(
-                                                          10),
+                                                          BorderRadius.circular(
+                                                              10),
                                                     ),
                                                   ),
                                                 ),
@@ -491,9 +529,9 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                       child: Wrap(
                                         direction: Axis.horizontal,
                                         children: List.generate(items.length,
-                                                (index) {
-                                              return buildCard(items[index]);
-                                            }),
+                                            (index) {
+                                          return buildCard(items[index]);
+                                        }),
                                       ),
                                     )),
 
@@ -544,8 +582,6 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                             ),
                           ),
                         ),
-
-
                       ],
                     ),
                   ],
@@ -573,81 +609,187 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
   }
 
   Widget buildCard(ResumeCards resume) => Container(
-    padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
-    margin: EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: Color(0xffF2EEE1),
-      borderRadius: BorderRadius.circular(5),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey,
-          offset: Offset(0.0, 1.0), // (x, y)
-          blurRadius: 3.0,
-        )
-      ],
-    ),
-    height: 164,
-    width: 148,
-    child: Stack(
-      children: [
-        // top cross icon
-        Align(
-          alignment: Alignment.topRight,
-          child: Icon(Icons.close, size: 20, color: Color(0xff864921)),
+        padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
+        margin: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Color(0xffF2EEE1),
+          borderRadius: BorderRadius.circular(5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              offset: Offset(0.0, 1.0), // (x, y)
+              blurRadius: 3.0,
+            )
+          ],
         ),
-
-        // center-document icon
-        Align(
-          alignment: Alignment.center,
-          child: InkWell(
-            child: Icon(
-              Icons.description,
-              size: 70,
-              color: Color(0xff4D6658),
+        height: 164,
+        width: 148,
+        child: Stack(
+          children: [
+            // top cross icon
+            Align(
+              alignment: Alignment.topRight,
+              child: Icon(Icons.close, size: 20, color: Color(0xff864921)),
             ),
-            onTap: () {},
-          ),
+
+            // center-document icon
+            Align(
+              alignment: Alignment.center,
+              child: InkWell(
+                child: Icon(
+                  Icons.description,
+                  size: 70,
+                  color: Color(0xff4D6658),
+                ),
+                onTap: () {},
+              ),
+            ),
+
+            // Bottom-text
+
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(resume.name,
+                    style: TextStyle(
+                        fontSize: 13,
+                        fontFamily: 'Archivo',
+                        fontWeight: FontWeight.bold))),
+          ],
         ),
-
-        // Bottom-text
-
-        Align(
-            alignment: Alignment.bottomCenter,
-            child: Text(resume.name,
-                style: TextStyle(
-                    fontSize: 13,
-                    fontFamily: 'Archivo',
-                    fontWeight: FontWeight.bold))),
-      ],
-    ),
-  );
+      );
 
   Widget buildDeck(String name) => Container(
-    margin: EdgeInsets.all(5),
-    width: 800,
-    height: 52,
-    padding: EdgeInsets.fromLTRB(26.93, 5, 21, 5),
-    decoration: BoxDecoration(
-        color: Color(0xffE9F1E8),
-        borderRadius: BorderRadius.all(Radius.circular(10))),
-    child:
-    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Text(
-        name,
-        style: TextStyle(fontFamily: 'Eczar', fontSize: 24),
-      ),
-      Transform.rotate(
-        angle: 270 * math.pi / 180,
-        child: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.arrow_drop_down,
-            size: 30,
-            color: Color(0xff864921),
-            // textDirection: TextDirection.rtl,
+        // margin: EdgeInsets.all(5),
+        width: 800,
+        height: 52,
+        padding: EdgeInsets.fromLTRB(26.93, 5, 21, 5),
+        decoration: BoxDecoration(
+            color: Color(0xffE9F1E8),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(
+            name,
+            style: TextStyle(fontFamily: 'Eczar', fontSize: 24),
           ),
+          Transform.rotate(
+            angle: angleValues[getIndexByName(name)] * math.pi / 180,
+            child: IconButton(
+              onPressed: () {
+                int prevIndex = visiblitiyValues.indexOf(true);
+                int currentIndex = getIndexByName(name);
+
+                bool newAnimation = false;
+
+                if (prevIndex != -1) {
+                  if (prevIndex != currentIndex) {
+                    heightValues[prevIndex] = closedHeight;
+                    visiblitiyValues[prevIndex] = false;
+                    angleValues[prevIndex] = 270;
+                    newAnimation = true;
+                  }
+                }
+                else {
+                  newAnimation = true;
+                }
+
+                if (newAnimation) {
+                  heightValues[currentIndex] = expandedHeight;
+                  visiblitiyValues[currentIndex] = true;
+                  angleValues[currentIndex] = 0;
+                }
+                else {
+                  heightValues[currentIndex] = closedHeight;
+                  visiblitiyValues[currentIndex] = false;
+                  angleValues[currentIndex] = 270;
+                }
+                setState(() {});
+              },
+              icon: Icon(
+                Icons.arrow_drop_down,
+                size: 30,
+                color: Color(0xff864921),
+                // textDirection: TextDirection.rtl,
+              ),
+            ),
+          ),
+        ]),
+      );
+
+  Widget buildExpandedContainer(List<String> currentList, String name) =>
+      Container(
+        padding: EdgeInsets.fromLTRB(33, 15, 120, 10),
+        height: 100,
+        width: 800,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
         ),
-      ),
-    ]),
-  );
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: List.generate(currentList.length, (index) {
+            String result =
+                ((index + 1).toString() + '. ' + currentList[index]);
+
+            return Text(
+              result,
+              style: TextStyle(fontFamily: 'Merriweather', fontSize: 16),
+            );
+          }),
+        ),
+      );
+
+  List<String> getCurrentList(String name) {
+    switch (name) {
+      case 'Skills':
+        return SkillsItems;
+      case 'Organizations':
+        return OrganizationsItems;
+      case 'Languages':
+        return LanguagesItems;
+      case 'Countries':
+        return CountriesItems;
+      case 'Publications':
+        return PublicationsItems;
+      case 'Links':
+        return LinksItems;
+      default:
+        return SkillsItems;
+    }
+  }
+
+  Widget getParsedInformationContainer(String name) => AnimatedContainer(
+        width: 800,
+        height: heightValues[getIndexByName(name)],
+        margin: EdgeInsets.all(10),
+        duration: Duration(seconds: 0),
+        child: Column(
+          children: [
+            buildDeck(name),
+            Visibility(
+              child: buildExpandedContainer(getCurrentList(name), name),
+              visible: visiblitiyValues[getIndexByName(name)],
+            ),
+          ],
+        ),
+      );
+
+  int getIndexByName(String name) {
+    switch (name) {
+      case 'Skills':
+        return 0;
+      case 'Organizations':
+        return 1;
+      case 'Languages':
+        return 2;
+      case 'Countries':
+        return 3;
+      case 'Publications':
+        return 4;
+      case 'Links':
+        return 5;
+      default:
+        return 0;
+    }
+  }
 }
