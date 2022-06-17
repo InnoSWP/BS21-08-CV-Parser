@@ -1,6 +1,7 @@
 import 'package:cv_parser/pages/AboutScreen.dart';
 import 'package:cv_parser/pages/ContactScreen.dart';
 import 'package:cv_parser/pages/ParsedInformationScreen.dart';
+import 'package:cv_parser/pages/parse_pdf.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -186,6 +187,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   elevation: 10,
                                 ),
                                 onPressed: () {
+                                  
+                                  parseFile();
+                                  
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
