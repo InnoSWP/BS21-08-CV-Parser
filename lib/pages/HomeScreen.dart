@@ -1,44 +1,45 @@
+import 'dart:collection';
+import 'dart:convert';
+
 import 'package:cv_parser/pages/AboutScreen.dart';
 import 'package:cv_parser/pages/ContactScreen.dart';
 import 'package:cv_parser/pages/ParsedInformationScreen.dart';
+import 'package:cv_parser/pages/ResumeCards.dart';
 import 'package:cv_parser/pages/parse_pdf.dart';
+import 'package:cv_parser/scripts/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 class HomeScreen extends StatefulWidget {
-
   static PageRouteBuilder getRoute() {
     return PageRouteBuilder(pageBuilder: (_, __, ___) {
       return HomeScreen();
     });
-
   }
-  
+
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class ResumeCards {
-  final String name;
-
-  const ResumeCards({
-    required this.name,
-  });
-}
-
 class _HomeScreenState extends State<HomeScreen> {
-  
-  List<ResumeCards> items = [
-    ResumeCards(name: "Jacob Jones"),
-    ResumeCards(name: "Albert Flores"),
-    ResumeCards(name: "Devon Lane"),
-    ResumeCards(name: "Cameron Williamson"),
-    ResumeCards(name: "Aditya Singh"),
-    ResumeCards(name: "Dwight Schrute"),
-    ResumeCards(name: "Michael Scott"),
-  ];
+  List<ResumeCards> items = [];
+
+  void initState() {
+    super.initState();
+    items = HistoryDeckSetter();
+  }
+
+  List<ResumeCards> HistoryDeckSetter() {
+    HashMap<String, String> informationList = loadAll();
+    Iterable<String> resumeNames = informationList.keys;
+    List<ResumeCards> listOfNames = [];
+    for (int i = 0; i < resumeNames.length; i++) {
+      listOfNames.add(new ResumeCards(name: resumeNames.elementAt(i)));
+    }
+    return listOfNames;
+  }
 
   List<ResumeCards> startItems = [];
   List<ResumeCards> endItems = [];
@@ -54,7 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Color(0xffE8E8E8),
           child: Column(
             children: [
-              
               // Nav-Bar
               Container(
                 padding: EdgeInsets.fromLTRB(70, 8, 70, 8),
@@ -97,7 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ))),
                           TextButton(
                               onPressed: () {
-                                Navigator.push(context, ContactScreen.getRoute());
+                                Navigator.push(
+                                    context, ContactScreen.getRoute());
                               },
                               child: const Text("Contact",
                                   style: TextStyle(
@@ -186,10 +187,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   minimumSize: Size(60, 50),
                                   elevation: 10,
                                 ),
-                                onPressed: () {
-                                  
-                                  parseFile();
-                                  
+                                onPressed: () async {
+                                  await parseFile();
+
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -212,14 +212,13 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 color: Color(0xffE9F1E8),
                 padding: EdgeInsets.all(8),
-                height: 209,
+                height: 250,
                 width: 1040,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    
-                    
+                    // Previous Icon Button
                     Transform.rotate(
                       angle: 180 * math.pi / 180,
                       child: IconButton(
@@ -247,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       width: 900,
                       child: SizedBox(
-                        height: 140,
+                        height: 200,
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           // mainAxisAlignment: MainAxisAlignment.start,
@@ -263,6 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
 
+                    // Next Icon Button
                     IconButton(
                       onPressed: () {
                         if (endIndex < items.length && items.length > 5) {
@@ -313,14 +313,27 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: EdgeInsets.fromLTRB(8, 8, 8, 10),
         margin: EdgeInsets.all(10),
         color: Color(0xffF2EEE1),
-        height: 164,
+        height: 200,
         width: 148,
         child: Stack(
           children: [
             // top cross icon
             Align(
               alignment: Alignment.topRight,
-              child: Icon(Icons.close, size: 20, color: Color(0xff864921)),
+              child: InkWell(
+                  onTap: () {
+                    remove(resume.name);
+
+                    // HistoryDeckSetter();
+                    items.remove(resume);
+
+                    Future.delayed(const Duration(milliseconds: 0), () {
+                      setState(() {
+                        HistoryDeckSetter();
+                      });
+                    });
+                  },
+                  child: Icon(Icons.close, size: 20, color: Color(0xff864921))),
             ),
 
             // center-document icon
@@ -332,7 +345,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   size: 70,
                   color: Color(0xff4D6658),
                 ),
-                onTap: () {},
+                onTap: () {
+                  ParsedInformationScreen.showResumes(resume);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const ParsedInformationScreen()));
+                },
               ),
             ),
 
@@ -340,11 +360,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
             Align(
                 alignment: Alignment.bottomCenter,
-                child: Text(resume.name,
-                    style: TextStyle(
-                        fontSize: 13,
-                        fontFamily: 'Archivo',
-                        fontWeight: FontWeight.bold))),
+                child: Text(
+                  resume.name,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontFamily: 'Archivo',
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                )),
           ],
         ),
       );

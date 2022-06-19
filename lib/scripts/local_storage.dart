@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:universal_html/html.dart';
 
 save(String name, String json) {
@@ -27,9 +29,9 @@ load(String name) {
 
 loadAll() {
   var values = window.localStorage;
-  var list = [];
+  HashMap informationList = new HashMap<String, String>();
   values.forEach((key, value) {
-    list.add({key, value});
+    informationList.putIfAbsent(key, () => value);
   });
-  return list;
+  return informationList;
 }

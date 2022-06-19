@@ -33,6 +33,7 @@ Future<String> textTojson(String text) async {
       }));
 
   if (response.statusCode == 200) {
+    // print(response.body);
     return response.body;
   } else {
     return "Error: ${response.statusCode}";
@@ -60,7 +61,7 @@ Future<void> parseFile() async {
   document.dispose();
 
   //Convert text to json.
-  var json = await mockAPI(text);
+  var json = await textTojson(text);
 
   //save the text to local storage
   save(fileName, json);

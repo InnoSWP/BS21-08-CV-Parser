@@ -1,16 +1,26 @@
+import 'dart:collection';
+
 import 'package:cv_parser/pages/AboutScreen.dart';
 import 'package:cv_parser/pages/ContactScreen.dart';
 import 'package:cv_parser/pages/HomeScreen.dart';
+import 'package:cv_parser/pages/ResumeCards.dart';
+import 'package:cv_parser/scripts/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'dart:math' as math;
+
+ResumeCards requestedResumeFromHomeScreen = new ResumeCards(name: "blank");
 
 class ParsedInformationScreen extends StatefulWidget {
   static PageRouteBuilder getRoute() {
     return PageRouteBuilder(pageBuilder: (_, __, ___) {
       return ParsedInformationScreen();
     });
+  }
+
+  static void showResumes(ResumeCards resume) {
+    requestedResumeFromHomeScreen = resume;
   }
 
   const ParsedInformationScreen({Key? key}) : super(key: key);
@@ -21,49 +31,55 @@ class ParsedInformationScreen extends StatefulWidget {
 }
 
 class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
+  final searchController = TextEditingController();
+
   // AnimationController? _controller;
   // Animation<double>? _animation;
 
-  double expandedHeight = 152;
+  List<ResumeCards> items = [];
+  List<ResumeCards> showingItems = [];
+
+  void initState() {
+    super.initState();
+    resumeListSetter();
+    // print(requestedResumeFromHomeScreen.name.runtimeType);
+    if (requestedResumeFromHomeScreen.name != "blank") {
+      showResume(requestedResumeFromHomeScreen);
+      requestedResumeFromHomeScreen = new ResumeCards(name: "blank");
+    }
+  }
+
+  void resumeListSetter() {
+    HashMap<String, String> informationList = loadAll();
+    Iterable<String> resumeNames = informationList.keys;
+    for (int i = 0; i < resumeNames.length; i++) {
+      items.add(new ResumeCards(name: resumeNames.elementAt(i)));
+      showingItems.add(new ResumeCards(name: resumeNames.elementAt(i)));
+    }
+  }
+
+  String personName = "";
+  String personPhoneNumber = "";
+  String personEmail = "";
+  String personUserName = "";
+  String personTelegramID = "";
+
+  double expandedHeight = 202;
   double closedHeight = 52;
 
   List<String> currentList = [];
 
-  List<ResumeCards> items = [
-    ResumeCards(name: "Jacob Jones"),
-    ResumeCards(name: "Albert Flores"),
-    ResumeCards(name: "Devon Lane"),
-    ResumeCards(name: "Cameron Williamson"),
-    ResumeCards(name: "Aditya Singh"),
-    ResumeCards(name: "Dwight Schrute"),
-    ResumeCards(name: "Michael Scott"),
-    ResumeCards(name: "Jim Halpert"),
-    ResumeCards(name: "Pam Beesly"),
-    ResumeCards(name: "Andy Bernard"),
-    ResumeCards(name: "Kelly Kapoor"),
-  ];
+  List<String> SkillsItems = [];
 
-  List<String> SkillsItems = [
-    "Active listening skills",
-    "Communication Skills",
-    "Java language"
-  ];
+  List<String> OrganizationsItems = [];
 
-  List<String> OrganizationsItems = [
-    "Innopolis University",
-    "Innopolis High School"
-  ];
+  List<String> LanguagesItems = [];
 
-  List<String> LanguagesItems = ["Java", "C++", "DOT Net"];
+  List<String> CountriesItems = [];
 
-  List<String> CountriesItems = ["Russia", "Ukraine", "America"];
+  List<String> PublicationsItems = [];
 
-  List<String> PublicationsItems = [
-    "Penguin House Publications",
-    "Hallen Publication"
-  ];
-
-  List<String> LinksItems = ["https://www.dambase.com/"];
+  List<String> LinksItems = [];
 
   List<bool> visiblitiyValues = [false, false, false, false, false, false];
 
@@ -204,7 +220,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                       BorderRadius.all(
                                                           Radius.circular(10))),
                                               child: Text(
-                                                "Albert Flores",
+                                                personName,
                                                 style: TextStyle(
                                                     fontFamily: 'Merriweather',
                                                     fontSize: 24),
@@ -217,6 +233,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                               // Information 1
                                               Container(
                                                 margin: EdgeInsets.all(10),
+                                                width: 300,
                                                 child: Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
@@ -231,7 +248,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                           ),
                                                           Text("  "),
                                                           Text(
-                                                            "(201) - 55 - 44",
+                                                            personPhoneNumber,
                                                             style: TextStyle(
                                                               fontFamily:
                                                                   'Merriweather',
@@ -253,7 +270,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                           ),
                                                           Text("  "),
                                                           Text(
-                                                            "bill.sanders@example.com",
+                                                            personEmail,
                                                             style: TextStyle(
                                                               fontFamily:
                                                                   'Merriweather',
@@ -274,7 +291,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                           ),
                                                           Text("  "),
                                                           Text(
-                                                            "brownbear646",
+                                                            personUserName,
                                                             style: TextStyle(
                                                               fontFamily:
                                                                   'Merriweather',
@@ -313,7 +330,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                           ),
                                                           Text("  "),
                                                           Text(
-                                                            "redkoala509",
+                                                            personTelegramID,
                                                             style: TextStyle(
                                                               fontFamily:
                                                                   'Merriweather',
@@ -355,7 +372,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                               // Parsed-Information-Display Section
                               Container(
                                 width: 900,
-                                height: 700,
+                                height: 800,
                                 margin: EdgeInsets.only(top: 30),
                                 color: Color(0xffE8E8E8),
                                 child: Column(
@@ -475,6 +492,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                 width: 400,
                                                 height: 20,
                                                 child: TextField(
+                                                  controller: searchController,
                                                   style: TextStyle(
                                                     // height: 3.0,
                                                     fontFamily: 'Merriweather',
@@ -512,10 +530,36 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                 ),
                                               ),
 
-                                              Icon(
-                                                Icons.search_outlined,
-                                                size: 20,
-                                                color: Color(0xff864921),
+                                              InkWell(
+                                                onTap: () {
+                                                  String query = searchController.text;
+                                                  if(query == "") {
+                                                    showingItems = items;
+                                                  }
+                                                  else {
+                                                    showingItems.clear();
+                                                  for (int i = 0; i < items.length; i++) {
+                                                    ResumeCards currentCard = items[i];
+                                                    for (int j = 0; j < currentCard.jsonList.length; j++) {
+                                                      if (currentCard.jsonList[j]["match"].toString().toLowerCase() == query.toLowerCase()) {
+                                                        showingItems.add(currentCard);
+                                                        break;
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                                
+                                                setState(() {
+                                                  
+                                                });
+                                                
+                                                
+                                                },
+                                                child: Icon(
+                                                  Icons.search_outlined,
+                                                  size: 20,
+                                                  color: Color(0xff864921),
+                                                ),
                                               )
                                             ]))),
 
@@ -528,9 +572,9 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                     child: SingleChildScrollView(
                                       child: Wrap(
                                         direction: Axis.horizontal,
-                                        children: List.generate(items.length,
-                                            (index) {
-                                          return buildCard(items[index]);
+                                        children: List.generate(
+                                            showingItems.length, (index) {
+                                          return buildCard(showingItems[index]);
                                         }),
                                       ),
                                     )),
@@ -629,7 +673,20 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
             // top cross icon
             Align(
               alignment: Alignment.topRight,
-              child: Icon(Icons.close, size: 20, color: Color(0xff864921)),
+              child: InkWell(
+                  onTap: () {
+                    remove(resume.name);
+
+                    items.remove(resume);
+                    showingItems.remove(resume);
+
+                    Future.delayed(const Duration(milliseconds: 0), () {
+                      setState(() {
+                        // resumeListSetter();
+                      });
+                    });
+                  },
+                  child: Icon(Icons.close, size: 20, color: Color(0xff864921))),
             ),
 
             // center-document icon
@@ -641,7 +698,9 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                   size: 70,
                   color: Color(0xff4D6658),
                 ),
-                onTap: () {},
+                onTap: () {
+                  showResume(resume);
+                },
               ),
             ),
 
@@ -657,6 +716,21 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
           ],
         ),
       );
+
+  void showResume(ResumeCards resume) {
+    personName = resume.name;
+    personEmail = resume.email;
+    // resume.jsonList.forEach((element) {
+    //   print("match:" + element["match"] + " ----- label: " + element["label"]);
+    // });
+    SkillsItems = resume.skillItems;
+    OrganizationsItems = resume.organizationItems;
+    LanguagesItems = resume.languagesItems;
+    CountriesItems = resume.countriesItems;
+    PublicationsItems = resume.publicationsItems;
+    LinksItems = resume.linksItems;
+    setState(() {});
+  }
 
   Widget buildDeck(String name) => Container(
         // margin: EdgeInsets.all(5),
@@ -688,8 +762,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                     angleValues[prevIndex] = 270;
                     newAnimation = true;
                   }
-                }
-                else {
+                } else {
                   newAnimation = true;
                 }
 
@@ -697,8 +770,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                   heightValues[currentIndex] = expandedHeight;
                   visiblitiyValues[currentIndex] = true;
                   angleValues[currentIndex] = 0;
-                }
-                else {
+                } else {
                   heightValues[currentIndex] = closedHeight;
                   visiblitiyValues[currentIndex] = false;
                   angleValues[currentIndex] = 270;
@@ -719,13 +791,15 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
   Widget buildExpandedContainer(List<String> currentList, String name) =>
       Container(
         padding: EdgeInsets.fromLTRB(33, 15, 120, 10),
-        height: 100,
+        height: 150,
         width: 800,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Colors.white,
         ),
-        child: Column(
+        child: SingleChildScrollView(
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: List.generate(currentList.length, (index) {
             String result =
@@ -736,7 +810,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
               style: TextStyle(fontFamily: 'Merriweather', fontSize: 16),
             );
           }),
-        ),
+        )),
       );
 
   List<String> getCurrentList(String name) {
