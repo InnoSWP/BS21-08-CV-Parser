@@ -58,7 +58,8 @@ Future<String> textTojson(String text) async {
 }
 
 Future<String> mockAPI(String text) async {
-  String mockResponse = '{"test": "c++", "test3": "python"}';
+  String mockResponse =
+      '[{"match":"research","label":"CsSkill","sentence":""},{"match":"Innopolis University - Phd","label":"ORG","sentence":"Innopolis University - Currently a Masters Degree in MSIT Software Engineering."},{"match":"English","label":"LANGUAGE","sentence":"Languages:Arabic (Native), English (Fluent), Japanese (beginner)"},{"match":"www.moofiyTv.com","label":"Links","sentence":"www.moofiyTv.com"},{"match":"muwaffaqimam@gmail.com","label":"emails","sentence":"muwaffaqimam@gmail.com"}]';
   return mockResponse;
 }
 
