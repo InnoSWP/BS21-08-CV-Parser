@@ -1,9 +1,12 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cv_parser/pages/HomeScreen.dart';
 import 'package:cv_parser/pages/ParsedInformationScreen.dart';
 import 'package:cv_parser/pages/AboutScreen.dart';
 import 'package:cv_parser/pages/ContactScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'dart:math' as math;
+import 'package:responsive_framework/responsive_wrapper.dart';
 
 class AboutScreen extends StatefulWidget {
   static PageRouteBuilder getRoute() {
@@ -21,7 +24,8 @@ class AboutScreen extends StatefulWidget {
 class _AboutScreenState extends State<AboutScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+        home: Scaffold(
       body: SingleChildScrollView(
         child: Container(
           color: Color(0xffF8F8F8),
@@ -29,7 +33,7 @@ class _AboutScreenState extends State<AboutScreen> {
             children: [
               // Nav-Bar
               Container(
-                padding: EdgeInsets.fromLTRB(70, 8, 70, 8),
+                padding: EdgeInsets.fromLTRB(20, 8, 70, 8),
                 color: Color(0xffFFFFFF),
                 height: 70,
                 child: Row(
@@ -38,7 +42,14 @@ class _AboutScreenState extends State<AboutScreen> {
                     // Title of the Navbar
                     Container(
                       child: Row(children: [
-                        Icon(
+                        ResponsiveVisibility(
+                            hiddenWhen: const [
+                              Condition.largerThan(name: TABLET)
+                            ],
+                            child: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.menu))),
+                        const Icon(
                           Icons.description,
                           size: 50,
                           color: Color(0xff864921),
@@ -59,33 +70,43 @@ class _AboutScreenState extends State<AboutScreen> {
                     Container(
                       child: Row(
                         children: [
-                          TextButton(
-                              onPressed: () {
-                                Navigator.push(context, HomeScreen.getRoute());
-                              },
-                              child: const Text("Home",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Color(0xff894621),
-                                    fontFamily: 'Merriweather',
-                                  ))),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context, ContactScreen.getRoute());
-                              },
-                              child: const Text("Contact",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Color(0xff894621),
-                                      fontFamily: 'Merriweather'))),
-                          TextButton(
-                              onPressed: () {},
-                              child: const Text("About",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Color(0xff894621),
-                                      fontFamily: 'Merriweather'))),
+                          ResponsiveVisibility(
+                              visible: false,
+                              visibleWhen: [Condition.largerThan(name: TABLET)],
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context, HomeScreen.getRoute());
+                                  },
+                                  child: const Text("Home",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Color(0xff894621),
+                                        fontFamily: 'Merriweather',
+                                      )))),
+                          ResponsiveVisibility(
+                              visible: false,
+                              visibleWhen: [Condition.largerThan(name: TABLET)],
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context, ContactScreen.getRoute());
+                                  },
+                                  child: const Text("Contact",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: Color(0xff894621),
+                                          fontFamily: 'Merriweather')))),
+                          ResponsiveVisibility(
+                              visible: false,
+                              visibleWhen: [Condition.largerThan(name: TABLET)],
+                              child: TextButton(
+                                  onPressed: () {},
+                                  child: const Text("About",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: Color(0xff894621),
+                                          fontFamily: 'Merriweather')))),
                         ],
                       ),
                     ),
@@ -97,22 +118,24 @@ class _AboutScreenState extends State<AboutScreen> {
               Container(
                 height: 290,
                 width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.fromLTRB(10, 100, 10, 100),
+                padding: EdgeInsets.fromLTRB(10, 60, 10, 0),
                 color: Color(0xff864921),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
+                  children: const [
+                    AutoSizeText(
+                      maxLines: 1,
                       "About",
                       style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 52,
                           color: Colors.white,
                           fontFamily: 'Eczar',
                           fontWeight: FontWeight.w700),
                       textAlign: TextAlign.center,
                     ),
-                    const Text(
-                      "Home / About ",
+                    AutoSizeText(
+                      maxLines: 1,
+                      "Home / About",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.white,
@@ -128,45 +151,53 @@ class _AboutScreenState extends State<AboutScreen> {
                 height: 600,
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.fromLTRB(0, 60, 0, 40),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [ 
-                    Container(
-                      margin: EdgeInsets.all(10),
-                      child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-
-                        Container(
-                          width: 300,
-                          child: const Text(
-                            "CV Parser Your AI Asistant",
-                            style: TextStyle(
-                                fontSize: 40,
-                                color: Color(0xff4D6658),
-                                fontFamily: 'Eczar',
-                                fontWeight: FontWeight.w600),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        const Text(
-                          "Cv Parser is my name At your fingertips, available 24 hours a day, \n 7 Days a week, whenever you need me. Resumes are something I \n Love eating. So, as a thank you, I will offer you with Json files of \n the Resimes If you gift me Resumes.",
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Color(0xff4D6658),
-                              fontFamily: 'Eczar'),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                  ),
-                    ),
-
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    child: Image.asset('images/about_image.jpg')),
-
-                  ]
-                ),
+                child: ResponsiveRowColumn(
+                    rowMainAxisAlignment: MainAxisAlignment.center,
+                    rowPadding: const EdgeInsets.all(30),
+                    columnPadding: const EdgeInsets.all(30),
+                    layout: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
+                        ? ResponsiveRowColumnType.COLUMN
+                        : ResponsiveRowColumnType.ROW,
+                    children: [
+                      ResponsiveRowColumnItem(
+                          columnFlex: 1,
+                          child: Container(
+                            margin: EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: 300,
+                                  child: const AutoSizeText(
+                                    maxLines: 1,
+                                    "CV Parser Your AI Asistant",
+                                    style: TextStyle(
+                                        fontSize: 40,
+                                        color: Color(0xff4D6658),
+                                        fontFamily: 'Eczar',
+                                        fontWeight: FontWeight.w600),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                const AutoSizeText(
+                                  maxLines: 4,
+                                  "Cv Parser is my name At your fingertips, available 24 hours a day, \n 7 Days a week, whenever you need me. Resumes are something I \n Love eating. So, as a thank you, I will offer you with Json files of \n the Resimes If you gift me Resumes.",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Color(0xff4D6658),
+                                      fontFamily: 'Eczar'),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          )),
+                      ResponsiveRowColumnItem(
+                        columnFlex: 1,
+                        child: Container(
+                            margin: EdgeInsets.all(10),
+                            child: Image.asset('images/about_image.jpg')),
+                      )
+                    ]),
               ),
 
               // Blank Rectangle
@@ -191,6 +222,6 @@ class _AboutScreenState extends State<AboutScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 }

@@ -1,9 +1,12 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cv_parser/pages/HomeScreen.dart';
 import 'package:cv_parser/pages/ParsedInformationScreen.dart';
 import 'package:cv_parser/pages/AboutScreen.dart';
 import 'package:cv_parser/pages/ContactScreen.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:responsive_framework/responsive_framework.dart';
 
 class ContactScreen extends StatefulWidget {
   static PageRouteBuilder getRoute() {
@@ -21,7 +24,8 @@ class ContactScreen extends StatefulWidget {
 class _ContactScreenState extends State<ContactScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+        home: Scaffold(
       body: SingleChildScrollView(
         child: Container(
           color: Color(0xffE8E8E8),
@@ -29,7 +33,7 @@ class _ContactScreenState extends State<ContactScreen> {
             children: [
               // Nav-Bar
               Container(
-                padding: EdgeInsets.fromLTRB(70, 8, 70, 8),
+                padding: EdgeInsets.fromLTRB(20, 8, 70, 8),
                 color: Color(0xffFFFFFF),
                 height: 70,
                 child: Row(
@@ -38,7 +42,14 @@ class _ContactScreenState extends State<ContactScreen> {
                     // Title of the Navbar
                     Container(
                       child: Row(children: [
-                        Icon(
+                        ResponsiveVisibility(
+                            hiddenWhen: const [
+                              Condition.largerThan(name: TABLET)
+                            ],
+                            child: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.menu))),
+                        const Icon(
                           Icons.description,
                           size: 50,
                           color: Color(0xff864921),
@@ -59,35 +70,46 @@ class _ContactScreenState extends State<ContactScreen> {
                     Container(
                       child: Row(
                         children: [
-                          TextButton(
-                              onPressed: () {
-                                Navigator.push(context, HomeScreen.getRoute());
-                              },
-                              child: const Text("Home",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Color(0xff894621),
-                                    fontFamily: 'Merriweather',
-                                  ))),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context, ContactScreen.getRoute());
-                              },
-                              child: const Text("Contact",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Color(0xff894621),
-                                      fontFamily: 'Merriweather'))),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.push(context, AboutScreen.getRoute());
-                              },
-                              child: const Text("About",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Color(0xff894621),
-                                      fontFamily: 'Merriweather'))),
+                          ResponsiveVisibility(
+                              visible: false,
+                              visibleWhen: [Condition.largerThan(name: TABLET)],
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context, HomeScreen.getRoute());
+                                  },
+                                  child: const Text("Home",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Color(0xff894621),
+                                        fontFamily: 'Merriweather',
+                                      )))),
+                          ResponsiveVisibility(
+                              visible: false,
+                              visibleWhen: [Condition.largerThan(name: TABLET)],
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context, ContactScreen.getRoute());
+                                  },
+                                  child: const Text("Contact",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: Color(0xff894621),
+                                          fontFamily: 'Merriweather')))),
+                          ResponsiveVisibility(
+                              visible: false,
+                              visibleWhen: [Condition.largerThan(name: TABLET)],
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context, AboutScreen.getRoute());
+                                  },
+                                  child: const Text("About",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: Color(0xff894621),
+                                          fontFamily: 'Merriweather')))),
                         ],
                       ),
                     ),
@@ -99,22 +121,24 @@ class _ContactScreenState extends State<ContactScreen> {
               Container(
                 height: 290,
                 width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.fromLTRB(10, 100, 10, 100),
+                padding: EdgeInsets.fromLTRB(10, 60, 10, 0),
                 color: Color(0xff864921),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
+                  children: const [
+                    AutoSizeText(
                       "Contact",
+                      maxLines: 1,
                       style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 52,
                           color: Colors.white,
                           fontFamily: 'Eczar',
                           fontWeight: FontWeight.w700),
                       textAlign: TextAlign.center,
                     ),
-                    const Text(
-                      "Home / Contact ",
+                    AutoSizeText(
+                      maxLines: 1,
+                      "Home/Contact",
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.white,
@@ -140,6 +164,7 @@ class _ContactScreenState extends State<ContactScreen> {
                           children: <Widget>[
                             SizedBox(height: 30.0),
                             const Text(
+                              maxLines: 1,
                               "Get In Touch",
                               style: TextStyle(
                                 fontSize: 36,
@@ -148,7 +173,8 @@ class _ContactScreenState extends State<ContactScreen> {
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            const Text(
+                            const AutoSizeText(
+                              maxLines: 1,
                               "We are help for you! How can we help you?",
                               style: TextStyle(
                                   fontSize: 18,
@@ -218,7 +244,8 @@ class _ContactScreenState extends State<ContactScreen> {
                 width: MediaQuery.of(context).size.width,
                 color: Color(0xffFbFDFE),
                 padding: EdgeInsets.fromLTRB(70, 20, 70, 10),
-                child: const Text("© iExtract 2022 - Your AI Assistant",
+                child: const AutoSizeText("© iExtract 2022 - Your AI Assistant",
+                    maxLines: 1,
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.black,
@@ -229,6 +256,6 @@ class _ContactScreenState extends State<ContactScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 }
