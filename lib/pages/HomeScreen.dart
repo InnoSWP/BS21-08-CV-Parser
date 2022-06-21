@@ -188,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   elevation: 10,
                                 ),
                                 onPressed: () async {
-                                  await parseFile();
+                                  await parseFiles();
 
                                   Navigator.push(
                                       context,
