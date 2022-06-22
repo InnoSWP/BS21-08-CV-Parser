@@ -1,3 +1,4 @@
+import 'package:cv_parser/Widgets/nav_drawer.dart';
 import 'package:cv_parser/pages/HomeScreen.dart';
 import 'package:cv_parser/pages/ParsedInformationScreen.dart';
 import 'package:cv_parser/pages/AboutScreen.dart';
