@@ -40,6 +40,8 @@ dependencies:
   universal_html: ^2.0.8
   csv: ^5.0.1
   open_file: ^3.2.1
+  responsive_framework: ^0.1.4
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
