@@ -1,18 +1,29 @@
 import 'dart:collection';
+import 'dart:html';
+import 'dart:io';
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
 
 import 'package:cv_parser/pages/AboutScreen.dart';
 import 'package:cv_parser/pages/ContactScreen.dart';
 import 'package:cv_parser/pages/HomeScreen.dart';
+import 'package:cv_parser/pages/PdfFile.dart';
 import 'package:cv_parser/pages/ResumeCards.dart';
+import 'package:cv_parser/pages/parse_pdf.dart';
 import 'package:cv_parser/scripts/local_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'dart:math' as math;
+import 'package:universal_html/html.dart';
 
-ResumeCards requestedResumeFromHomeScreen = new ResumeCards(name: "blank");
+ResumeCards requestedResumeFromHomeScreen =
+    new ResumeCards(name: "blank", parsed: false);
+
+List<PdfFile> newFiles = [];
 
 class ParsedInformationScreen extends StatefulWidget {
+  
+  
   static PageRouteBuilder getRoute() {
     return PageRouteBuilder(pageBuilder: (_, __, ___) {
       return ParsedInformationScreen();
@@ -23,6 +34,10 @@ class ParsedInformationScreen extends StatefulWidget {
     requestedResumeFromHomeScreen = resume;
   }
 
+  static void addFiles(List<PdfFile> files) {
+    newFiles = files;
+  }
+
   const ParsedInformationScreen({Key? key}) : super(key: key);
 
   @override
@@ -31,30 +46,96 @@ class ParsedInformationScreen extends StatefulWidget {
 }
 
 class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
+  
   final searchController = TextEditingController();
 
-  // AnimationController? _controller;
-  // Animation<double>? _animation;
-
+  ResumeCards currentResume = new ResumeCards(name: "blank", parsed: true);
   List<ResumeCards> items = [];
   List<ResumeCards> showingItems = [];
+  
+
+
+  bool load = true;
+  
+  int count = 0;
+  
+  bool informationVisible = false;
 
   void initState() {
     super.initState();
-    resumeListSetter();
-    // print(requestedResumeFromHomeScreen.name.runtimeType);
-    if (requestedResumeFromHomeScreen.name != "blank") {
-      showResume(requestedResumeFromHomeScreen);
-      requestedResumeFromHomeScreen = new ResumeCards(name: "blank");
+    if (load) {
+      resumeListSetter();
+      newFilesAdder();
+      if (requestedResumeFromHomeScreen.name != "blank") {
+        informationVisible = true;
+        showResume(requestedResumeFromHomeScreen);
+        requestedResumeFromHomeScreen =
+            new ResumeCards(name: "blank", parsed: true);
+      }
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (newFiles.isNotEmpty && load) {
+          load = false;
+          fileLoader();
+        }
+      });
     }
   }
 
-  void resumeListSetter() {
+  Future<void> fileLoader() async {
+    for (int i = 0; i < newFiles.length; i++) {
+      parseFile(newFiles[i]);
+
+      for (int j = 0; j < items.length; j++) {
+        if (items[j].name == newFiles[i].name) {
+          // now their parsed value is true.
+          // but that doesn't mean that their JSONs
+          // are parsed.
+          // so after this we have to call the
+          // resumelistsetter for the last time.
+          items[j].parsed = true;
+          showingItems[j].parsed = true;
+        }
+      }
+
+      // newFiles.removeAt(i);
+      await Future.delayed(const Duration(seconds: 2), () {
+        setState(() {
+          // items.clear();
+          // showingItems.clear();
+          // resumeListSetter();
+          print("success");
+        });
+      });
+    }
+
+    setState(() {
+      // because of new file adder,
+      // the list contains some files which are not parsed
+      // so we will clear both the lists and setup the resumeList again.
+      // and hence we are done here.
+      items.clear();
+      showingItems.clear();
+      newFiles.clear();
+      resumeListSetter();
+    });
+  }
+
+  Future<void> newFilesAdder() async {
+    for (int i = 0; i < newFiles.length; i++) {
+      // the parsed value is false
+      // which means they are not parsed yet.
+      items.add(new ResumeCards(name: newFiles[i].name, parsed: false));
+      showingItems.add(new ResumeCards(name: newFiles[i].name, parsed: false));
+    }
+  }
+
+  Future<void> resumeListSetter() async {
     HashMap<String, String> informationList = loadAll();
     Iterable<String> resumeNames = informationList.keys;
     for (int i = 0; i < resumeNames.length; i++) {
-      items.add(new ResumeCards(name: resumeNames.elementAt(i)));
-      showingItems.add(new ResumeCards(name: resumeNames.elementAt(i)));
+      items.add(new ResumeCards(name: resumeNames.elementAt(i), parsed: true));
+      showingItems
+          .add(new ResumeCards(name: resumeNames.elementAt(i), parsed: true));
     }
   }
 
@@ -81,11 +162,13 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
 
   List<String> LinksItems = [];
 
-  List<bool> visiblitiyValues = [false, false, false, false, false, false];
+  List<bool> visiblitiyValues = [false, false, false, false, false, false, false, false, false];
 
-  List<double> heightValues = [52, 52, 52, 52, 52, 52];
+  List<bool> visibilityContainers = [false, false, false, false, false, false, false, false, false];
 
-  List<double> angleValues = [270, 270, 270, 270, 270, 270];
+  List<double> heightValues = [52, 52, 52, 52, 52, 52, 52, 52, 52];
+
+  List<double> angleValues = [270, 270, 270, 270, 270, 270, 270, 270, 270];
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +197,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                           color: Color(0xff864921),
                         ),
                         const Text(
-                          "iExtract",
+                          "CV Parser",
                           style: TextStyle(
                             fontSize: 36,
                             color: Color(0xff864921),
@@ -177,244 +260,186 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                           color: Color(0xffE8E8E8),
                           padding: EdgeInsets.fromLTRB(64, 27, 32, 36),
                           width: 0.6 * MediaQuery.of(context).size.width,
-                          child: Column(
-                            children: [
-                              // Top-Heading
-                              Align(
-                                  alignment: Alignment.center,
-                                  child: Text("Parsed Information",
-                                      style: TextStyle(
-                                          color: Color(0xff7A370B),
-                                          fontSize: 30,
-                                          fontFamily: 'Eczar',
-                                          fontWeight: FontWeight.w700))),
-
-                              // Basic-Information-Container
-                              Container(
-                                width: 900,
-                                height: 169,
-                                child: Row(
-                                  children: [
-                                    // top-basic-information
-                                    Container(
-                                      padding:
-                                          EdgeInsets.fromLTRB(21, 8, 22, 21),
-                                      width: 621,
-                                      height: 169,
-                                      decoration: BoxDecoration(
-                                          color: Color(0xffF2EEE1),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10))),
-                                      child: Column(
-                                        children: [
-                                          // Name of Person
-                                          Container(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  12, 7, 84, 8),
-                                              margin: EdgeInsets.all(5),
-                                              width: 575,
-                                              height: 43,
-                                              decoration: BoxDecoration(
-                                                  color: Color(0xffFBFDF7),
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(10))),
-                                              child: Text(
-                                                personName,
-                                                style: TextStyle(
-                                                    fontFamily: 'Merriweather',
-                                                    fontSize: 24),
-                                              )),
-
-                                          // information
-                                          Row(
-                                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              // Information 1
-                                              Container(
-                                                margin: EdgeInsets.all(10),
-                                                width: 300,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    // contact-number
-                                                    Container(
-                                                      child: Row(
-                                                        children: [
-                                                          Icon(
-                                                            Icons.phone,
-                                                            size: 22,
-                                                          ),
-                                                          Text("  "),
-                                                          Text(
-                                                            personPhoneNumber,
-                                                            style: TextStyle(
-                                                              fontFamily:
-                                                                  'Merriweather',
-                                                              fontSize: 16,
+                          child: Visibility(
+                            visible: informationVisible,
+                            child: Column(
+                              children: [
+                                                  
+                                // Top-Heading
+                                Align(
+                                    // alignment: Alignment.center,
+                                    child: Text("Parsed Information",
+                                        style: TextStyle(
+                                            color: Color(0xff7A370B),
+                                            fontSize: 30,
+                                            fontFamily: 'Eczar',
+                                            fontWeight: FontWeight.w700))),
+                                                  
+                                // Basic-Information-Container
+                                Container(
+                                  width: 900,
+                                  height: 169,
+                                  child: Row(
+                                    children: [
+                                      // top-basic-information
+                                      Container(
+                                        padding:
+                                            EdgeInsets.fromLTRB(21, 8, 22, 21),
+                                        width: 621,
+                                        height: 169,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xffF2EEE1),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10))),
+                                        child: Column(
+                                          children: [
+                                            // Name of Person
+                                            Container(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    12, 7, 84, 8),
+                                                margin: EdgeInsets.all(5),
+                                                width: 575,
+                                                height: 43,
+                                                decoration: BoxDecoration(
+                                                    color: Color(0xffFBFDF7),
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(10))),
+                                                child: Text(
+                                                  personName,
+                                                  style: TextStyle(
+                                                      fontFamily: 'Merriweather',
+                                                      fontSize: 24),
+                                                )),
+                                                      
+                                            // information
+                                            Row(
+                                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                // Information 1
+                                                Container(
+                                                  margin: EdgeInsets.all(10),
+                                                  width: 300,
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                    children: [
+                                                      
+                                                      // Email-ID
+                                                      Container(
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(
+                                                              Icons
+                                                                  .alternate_email,
+                                                              size: 22,
                                                             ),
-                                                          )
-                                                        ],
+                                                            Text("  "),
+                                                            Text(
+                                                              personEmail,
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Merriweather',
+                                                                fontSize: 16,
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ),
-
-                                                    // Email-ID
-                                                    Container(
-                                                      child: Row(
-                                                        children: [
-                                                          Icon(
-                                                            Icons
-                                                                .alternate_email,
-                                                            size: 22,
-                                                          ),
-                                                          Text("  "),
-                                                          Text(
-                                                            personEmail,
-                                                            style: TextStyle(
-                                                              fontFamily:
-                                                                  'Merriweather',
-                                                              fontSize: 16,
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-
-                                                    // Git account
-                                                    Container(
-                                                      child: Row(
-                                                        children: [
-                                                          Icon(
-                                                            Icons.person,
-                                                            size: 22,
-                                                          ),
-                                                          Text("  "),
-                                                          Text(
-                                                            personUserName,
-                                                            style: TextStyle(
-                                                              fontFamily:
-                                                                  'Merriweather',
-                                                              fontSize: 16,
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
+                                                    
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-
-                                              // Blank Line
-                                              Container(
-                                                margin: EdgeInsets.fromLTRB(
-                                                    60, 5, 10, 0),
-                                                height: 80,
-                                                width: 1,
-                                                color: Colors.black,
-                                              ),
-
-                                              // Information 2
-                                              Container(
-                                                // margin: EdgeInsets.all(2),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      child: Row(
-                                                        children: [
-                                                          Icon(
-                                                            Icons.send,
-                                                            size: 22,
-                                                          ),
-                                                          Text("  "),
-                                                          Text(
-                                                            personTelegramID,
-                                                            style: TextStyle(
-                                                              fontFamily:
-                                                                  'Merriweather',
-                                                              fontSize: 16,
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-
-                                    Container(
-                                      width: 12,
-                                      height: 169,
-                                    ),
-
-                                    // profile-photo
-                                    Container(
-                                      width: 172,
-                                      height: 169,
-                                      decoration: BoxDecoration(
-                                          color: Color(0xffF2EEE1),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(7.0))),
-                                      child: Icon(Icons.account_circle_outlined,
-                                          size: 120, color: Color(0xff7A370B)),
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              // Parsed-Information-Display Section
-                              Container(
-                                width: 900,
-                                height: 800,
-                                margin: EdgeInsets.only(top: 30),
-                                color: Color(0xffE8E8E8),
-                                child: Column(
-                                  children: [
-                                    getParsedInformationContainer("Skills"),
-
-                                    getParsedInformationContainer(
-                                        "Organizations"),
-
-                                    getParsedInformationContainer("Languages"),
-
-                                    getParsedInformationContainer("Countries"),
-
-                                    getParsedInformationContainer(
-                                        "Publications"),
-
-                                    getParsedInformationContainer("Links"),
-
-                                    Container(
-                                      height: 100,
-                                    ),
-
-                                    // Export CVs
-                                    ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Color(0xff4D6658),
-                                          onPrimary: Colors.white,
-                                          textStyle: TextStyle(fontSize: 16),
-                                          minimumSize: Size(291, 45),
-                                          elevation: 10,
+                                              
+                                              
+                                              
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                        onPressed: () {},
-                                        child: Text(
-                                          "Export CV",
-                                          style: TextStyle(
-                                              fontFamily: 'Eczar',
-                                              fontSize: 15),
-                                        ))
-                                  ],
+                                      ),
+                                                      
+                                      Container(
+                                        width: 12,
+                                        height: 169,
+                                      ),
+                                                      
+                                      // profile-photo
+                                      Container(
+                                        width: 172,
+                                        height: 169,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xffF2EEE1),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(7.0))),
+                                        child: Icon(Icons.account_circle_outlined,
+                                            size: 120, color: Color(0xff7A370B)),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              )
-                            ],
+                                                  
+                                // Parsed-Information-Display Section
+                                Container(
+                                  width: 900,
+                                  height: 800,
+                                  margin: EdgeInsets.only(top: 30),
+                                  color: Color(0xffE8E8E8),
+                                  child: Column(
+                                    children: [
+                                                      
+                                                      
+                                                      
+                                      getParsedInformationContainer("Skills"),
+                                                      
+                                      getParsedInformationContainer(
+                                          "Organizations"),
+                                                      
+                                      getParsedInformationContainer("Languages"),
+                                                      
+                                      getParsedInformationContainer("Countries"),
+                                                      
+                                      getParsedInformationContainer("NORP"),
+                                                      
+                                      getParsedInformationContainer("GPE"),
+                                                      
+                                      getParsedInformationContainer("Degree"),
+                                                      
+                                      getParsedInformationContainer(
+                                          "Publications"),
+                                                      
+                                      getParsedInformationContainer("Links"),
+                                                      
+                                      Container(
+                                        height: 100,
+                                      ),
+                                                      
+                                      // Export CVs
+                                      ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Color(0xff4D6658),
+                                            onPrimary: Colors.white,
+                                            textStyle: TextStyle(fontSize: 16),
+                                            minimumSize: Size(291, 45),
+                                            elevation: 10,
+                                          ),
+                                          onPressed: () {
+                                            exportAsCSV();
+                                          },
+                                          child: Text(
+                                            "Export CV",
+                                            style: TextStyle(
+                                                fontFamily: 'Eczar',
+                                                fontSize: 15),
+                                          ))
+                                                      
+                                                      
+                                                      
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
 
@@ -422,7 +447,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                         Expanded(
                           child: Container(
                             color: Color(0xffFbFdF7),
-                            height: 1010,
+                            height: 1113,
                             width: 590,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -431,16 +456,9 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                 Container(
                                   decoration: BoxDecoration(
                                     color: Color(0xffFbFdF7),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey,
-                                        offset: Offset(0.0, 1.0), // (x, y)
-                                        blurRadius: 6.0,
-                                      )
-                                    ],
                                   ),
                                   height: 85,
-                                  width: 600,
+                                  width: 650,
                                   child: Column(
                                     // mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -461,7 +479,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                     ],
                                   ),
                                 ),
-
+                        
                                 // Search Bar
                                 Align(
                                     alignment: Alignment.center,
@@ -529,31 +547,47 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                   ),
                                                 ),
                                               ),
-
+                        
                                               InkWell(
                                                 onTap: () {
-                                                  String query = searchController.text;
-                                                  if(query == "") {
-                                                    showingItems = items;
-                                                  }
-                                                  else {
+                                                  String query =
+                                                      searchController.text;
+                                                  if (query == "") {
+                                                    showingItems =
+                                                        items.sublist(
+                                                            0, items.length);
+                                                  } else {
                                                     showingItems.clear();
-                                                  for (int i = 0; i < items.length; i++) {
-                                                    ResumeCards currentCard = items[i];
-                                                    for (int j = 0; j < currentCard.jsonList.length; j++) {
-                                                      if (currentCard.jsonList[j]["match"].toString().toLowerCase() == query.toLowerCase()) {
-                                                        showingItems.add(currentCard);
-                                                        break;
+                                                    for (int i = 0;
+                                                        i < items.length;
+                                                        i++) {
+                                                      ResumeCards currentCard =
+                                                          items[i];
+                                                      for (int j = 0;
+                                                          j <
+                                                              currentCard
+                                                                  .jsonList
+                                                                  .length;
+                                                          j++) {
+                                                        String matching =
+                                                            currentCard
+                                                                .jsonList[j]
+                                                                    ["match"]
+                                                                .toString()
+                                                                .toLowerCase();
+                                                        query =
+                                                            query.toLowerCase();
+                                                        if (matching
+                                                            .contains(query)) {
+                                                          showingItems
+                                                              .add(currentCard);
+                                                          break;
+                                                        }
                                                       }
                                                     }
                                                   }
-                                                }
-                                                
-                                                setState(() {
-                                                  
-                                                });
-                                                
-                                                
+                        
+                                                  setState(() {});
                                                 },
                                                 child: Icon(
                                                   Icons.search_outlined,
@@ -562,7 +596,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                 ),
                                               )
                                             ]))),
-
+                        
                                 // Resumes-List-Containing-Container
                                 Container(
                                     padding: EdgeInsets.all(16),
@@ -578,7 +612,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                         }),
                                       ),
                                     )),
-
+                        
                                 // Bottom-Buttons
                                 Container(
                                   child: Row(
@@ -592,7 +626,9 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                             minimumSize: Size(164, 45),
                                             elevation: 10,
                                           ),
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            exportMulitpleResumes();
+                                          },
                                           child: Text(
                                             "Export Multiple CVs",
                                             style: TextStyle(
@@ -690,39 +726,29 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
             ),
 
             // center-document icon
-            Align(
-              alignment: Alignment.center,
-              child: InkWell(
-                child: Icon(
-                  Icons.description,
-                  size: 70,
-                  color: Color(0xff4D6658),
-                ),
-                onTap: () {
-                  showResume(resume);
-                },
-              ),
-            ),
+            resumeIcon(resume),
 
             // Bottom-text
 
             Align(
                 alignment: Alignment.bottomCenter,
-                child: Text(resume.name,
-                    style: TextStyle(
-                        fontSize: 13,
-                        fontFamily: 'Archivo',
-                        fontWeight: FontWeight.bold))),
+                child: Text(
+                  resume.name,
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontFamily: 'Archivo',
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                )),
           ],
         ),
       );
 
   void showResume(ResumeCards resume) {
+    currentResume = resume;
     personName = resume.name;
     personEmail = resume.email;
-    // resume.jsonList.forEach((element) {
-    //   print("match:" + element["match"] + " ----- label: " + element["label"]);
-    // });
+
     SkillsItems = resume.skillItems;
     OrganizationsItems = resume.organizationItems;
     LanguagesItems = resume.languagesItems;
@@ -805,31 +831,69 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
             String result =
                 ((index + 1).toString() + '. ' + currentList[index]);
 
-            return Text(
-              result,
-              style: TextStyle(fontFamily: 'Merriweather', fontSize: 16),
-            );
+            return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    result,
+                    style: TextStyle(fontFamily: 'Merriweather', fontSize: 16),
+                  ),
+                  InkWell(
+                      onTap: () {
+                        for (int i = 0; i < items.length; i++) {
+                          if (items[i].name == currentResume.name) {
+                            for (int j = 0; j < items[i].jsonList.length; j++) {
+                              if (items[i].jsonList[j]["match"] ==
+                                      currentList[index] &&
+                                  items[i].jsonList[j]["label"] ==
+                                      getJSONLabel(name)) {
+                                // print(i);
+                                items[i].jsonList.removeAt(j);
+                                // print(currentResume.jsonList[i]["label"]);
+                              }
+                            }
+
+                            currentList.clear();
+                            items[i].parsingData();
+                          }
+                        }
+
+                        Future.delayed(const Duration(milliseconds: 1000), () {
+                          // print(currentResume.skillItems);
+                          setState(() {
+                            // resumeListSetter();
+                          });
+                        });
+                      },
+                      child:
+                          Icon(Icons.close, size: 20, color: Color(0xff864921)))
+                ]);
           }),
         )),
       );
 
   List<String> getCurrentList(String name) {
-    switch (name) {
-      case 'Skills':
-        return SkillsItems;
-      case 'Organizations':
-        return OrganizationsItems;
-      case 'Languages':
-        return LanguagesItems;
-      case 'Countries':
-        return CountriesItems;
-      case 'Publications':
-        return PublicationsItems;
-      case 'Links':
-        return LinksItems;
-      default:
-        return SkillsItems;
+    for (int i = 0; i < items.length; i++) {
+      if (currentResume.name == items[i].name) {
+        switch (name) {
+          case 'Skills':
+            return items[i].skillItems;
+          case 'Organizations':
+            return items[i].organizationItems;
+          case 'Languages':
+            return items[i].languagesItems;
+          case 'Countries':
+            return items[i].countriesItems;
+          case 'Publications':
+            return items[i].publicationsItems;
+          case 'Links':
+            return items[i].linksItems;
+          default:
+            return items[i].skillItems;
+        }
+      }
     }
+    return currentResume.skillItems;
   }
 
   Widget getParsedInformationContainer(String name) => AnimatedContainer(
@@ -866,4 +930,158 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
         return 0;
     }
   }
+
+  Widget resumeIcon(ResumeCards resume) {
+    if (!resume.parsed) {
+      return new CircularProgressIndicator();
+    } else {
+      return Align(
+        alignment: Alignment.center,
+        child: InkWell(
+          child: Icon(
+            Icons.description,
+            size: 70,
+            color: Color(0xff4D6658),
+          ),
+          onTap: () {
+            informationVisible = true;
+            showResume(resume);
+          },
+        ),
+      );
+    }
+  }
+
+  void exportMulitpleResumes() {
+    for (int i = 0; i < showingItems.length; i++) {
+      // List<List<dynamic>> rows = [];
+
+      // print(showingItems[i].name);
+
+      // String csv;
+      String line = "";
+
+      line += "Skills, ";
+      for (int i = 0; i < showingItems[i].skillItems.length; i++) {
+        line += showingItems[i].skillItems[i] + ", ";
+      }
+      line += "\n";
+
+      line += "Organizations, ";
+      for (int i = 0; i < showingItems[i].organizationItems.length; i++) {
+        line += showingItems[i].organizationItems[i] + ", ";
+      }
+      line += "\n";
+
+      line += "Languages, ";
+      for (int i = 0; i < showingItems[i].languagesItems.length; i++) {
+        line += showingItems[i].languagesItems[i] + ", ";
+      }
+      line += "\n";
+
+      line += "Countries, ";
+      for (int i = 0; i < showingItems[i].countriesItems.length; i++) {
+        line += showingItems[i].countriesItems[i] + ", ";
+      }
+      line += "\n";
+
+      line += "Publications, ";
+      for (int i = 0; i < showingItems[i].publicationsItems.length; i++) {
+        line += showingItems[i].publicationsItems[i] + ", ";
+      }
+      line += "\n";
+
+      line += "Links, ";
+      for (int i = 0; i < showingItems[i].linksItems.length; i++) {
+        line += showingItems[i].linksItems[i] + ", ";
+      }
+      line += "\n";
+
+      // String csv = const ListToCsvConverter().convert(rows);
+
+      // print(line);
+
+      // save(showingItems[i].name.toString() + " as CSV", line);
+
+      csv_download(line, showingItems[i].name + ".csv");
+    }
+  }
+
+  void exportAsCSV() {
+    for (int i = 0; i < items.length; i++) {
+
+      if (items[i].name == currentResume.name) {
+        List<List<dynamic>> rows = [];
+
+        // String csv;
+        String line = "";
+
+        line += "Skills, ";
+        for (int i = 0; i < items[i].skillItems.length; i++) {
+          line += items[i].skillItems[i] + ", ";
+        }
+        line += "\n";
+
+        line += "Organizations, ";
+        for (int i = 0; i < items[i].organizationItems.length; i++) {
+          line += items[i].organizationItems[i] + ", ";
+        }
+        line += "\n";
+
+        line += "Languages, ";
+        for (int i = 0; i < items[i].languagesItems.length; i++) {
+          line += items[i].languagesItems[i] + ", ";
+        }
+        line += "\n";
+
+        line += "Countries, ";
+        for (int i = 0; i < items[i].countriesItems.length; i++) {
+          line += items[i].countriesItems[i] + ", ";
+        }
+        line += "\n";
+
+        line += "Publications, ";
+        for (int i = 0; i < items[i].publicationsItems.length; i++) {
+          line += items[i].publicationsItems[i] + ", ";
+        }
+        line += "\n";
+
+        line += "Links, ";
+        for (int i = 0; i < items[i].linksItems.length; i++) {
+          line += items[i].linksItems[i] + ", ";
+        }
+        line += "\n";
+
+        // String csv = const ListToCsvConverter().convert(rows);
+
+        print(line);
+
+        // save(items[i].name.toString() + " as CSV", line);
+
+        csv_download(line, items[i].name + ".csv");
+      }
+    }
+  }
+
+  String getJSONLabel(String name) {
+    switch (name) {
+      case "Skills":
+        return "CsSkill";
+      case "Organizations":
+        return "ORG";
+      case "Languages":
+        return "LANGUAGE";
+      case "Links":
+        return "Links";
+      default:
+        return "";
+    }
+  }
+
+  void csv_download(String csv, String name) {
+    AnchorElement(href: "data:text/plain;charset=utf-8,$csv")
+      ..setAttribute("download", name)
+      ..click();
+  }
+
 }

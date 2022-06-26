@@ -38,9 +38,8 @@ dependencies:
   http: ^0.13.4
   syncfusion_flutter_pdf: ^20.1.60-beta
   universal_html: ^2.0.8
-  responsive_framework: ^0.1.4
-  auto_size_text: ^3.0.0
-  
+  csv: ^5.0.1
+  open_file: ^3.2.1
 
 dev_dependencies:
   flutter_test:

@@ -1,17 +1,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:cv_parser/pages/PdfFile.dart';
 import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:cv_parser/scripts/local_storage.dart';
 import 'package:universal_html/html.dart';
-
-class PdfFile<T1, T2> {
-  final T1 name;
-  final T2 bytes;
-
-  PdfFile(this.name, this.bytes);
-}
 
 Future<List<PdfFile>> getFilesBytes() async {
   List<PdfFile> files = [];
@@ -63,26 +57,49 @@ Future<String> mockAPI(String text) async {
   return mockResponse;
 }
 
-Future<void> parseFiles() async {
+Future<void> parseFile(PdfFile file) async {
   //Load the PDF document.
-  final List<PdfFile> files = await getFilesBytes();
+  // final List<dynamic> file = await getFileBytes();
+  final String fileName = file.name;
+  final PdfDocument document = PdfDocument(inputBytes: file.bytes as Uint8List);
 
-  for (int i = 0; i < files.length; i++) {
-    final String fileName = files[i].name;
-    final PdfDocument document = PdfDocument(inputBytes: files[i].bytes);
+  //Create PDF text extractor to extract text.
+  final PdfTextExtractor extractor = PdfTextExtractor(document);
 
-    //Create PDF text extractor to extract text.
-    final PdfTextExtractor extractor = PdfTextExtractor(document);
+  //Extract text.
+  final String text = extractor.extractText();
 
-    //Extract text.
-    final String text = extractor.extractText();
+  //Dispose the document.
+  document.dispose();
 
-    //Dispose the document.
-    document.dispose();
+  //Convert text to json.
+  var json = await mockAPI(text);
 
-    //save the text to local storage
-    var json = await mockAPI(text);
-    // var all = loadAll();
-    save(fileName, json);
-  }
+  //save the text to local storage
+  save(fileName, json);
 }
+
+
+// Future<void> parseFiles() async {
+//   //Load the PDF document.
+//   final List<PdfFile> files = await getFilesBytes();
+
+//   for (int i = 0; i < files.length; i++) {
+//     final String fileName = files[i].name;
+//     final PdfDocument document = PdfDocument(inputBytes: files[i].bytes);
+
+//     //Create PDF text extractor to extract text.
+//     final PdfTextExtractor extractor = PdfTextExtractor(document);
+
+//     //Extract text.
+//     final String text = extractor.extractText();
+
+//     //Dispose the document.
+//     document.dispose();
+
+//     //save the text to local storage
+//     var json = await mockAPI(text);
+//     // var all = loadAll();
+//     save(fileName, json);
+//   }
+// }

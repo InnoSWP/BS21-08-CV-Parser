@@ -5,13 +5,15 @@ import 'package:cv_parser/scripts/local_storage.dart';
 class ResumeCards {
   final String name;
   String email = "";
+  bool parsed = false;
 
   List<dynamic> jsonList = [];
 
   ResumeCards({
     required this.name,
+    required this.parsed
   }) {
-    if (this.name != "blank") {
+    if (this.name != "blank" && parsed == true) {
       jsonList = jsonDecode(load(name)) as List;
       parsingData();
     }
@@ -23,28 +25,39 @@ class ResumeCards {
   List<String> countriesItems = [];
   List<String> publicationsItems = [];
   List<String> linksItems = [];
+  List<String> norpItems = [];
+  List<String> gpeItems = [];
+  List<String> degreeItems = [];
 
   void parsingData() {
-    jsonList.forEach((element) {
-      switch (element["label"]) {
+    for(int i = 0; i < jsonList.length; i++) {
+      switch (jsonList[i]["label"]) {
         case "CsSkill":
-          skillItems.add(element["match"]);
+          skillItems.add(jsonList[i]["match"]);
+          break;
+        case "GPE":
+          gpeItems.add(jsonList[i]["match"]);
+          break;
+        case "Degree":
+          degreeItems.add(jsonList[i]["match"]);
+          break;
+        case "NORP":
+          norpItems.add(jsonList[i]["match"]);
           break;
         case "ORG":
-          organizationItems.add(element["match"]);
+          organizationItems.add(jsonList[i]["match"]);
           break;
         case "LANGUAGE":
-          languagesItems.add(element["match"]);
+          languagesItems.add(jsonList[i]["match"]);
           break;
         case "Links":
-          linksItems.add(element["match"]);
+          linksItems.add(jsonList[i]["match"]);
           break;
         case "emails":
-          email = element["match"];
+          email = "";
+          email = jsonList[i]["match"];
           break;
       }
-    });
-
-    // print(organizationItems);
+    }
   }
 }
