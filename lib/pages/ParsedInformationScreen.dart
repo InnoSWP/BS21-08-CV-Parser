@@ -662,22 +662,22 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                       SizedBox(
                                         width: 20,
                                       ),
-                                      ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Color(0xff4D6658),
-                                            onPrimary: Colors.white,
-                                            textStyle: TextStyle(fontSize: 15),
-                                            minimumSize: Size(164, 45),
-                                            elevation: 10,
-                                          ),
-                                          onPressed: () {},
-                                          child: Text(
-                                            "Add Resumes (CVs)",
-                                            style: TextStyle(
-                                                fontFamily: 'Eczar',
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold),
-                                          )),
+                                      // ElevatedButton(
+                                      //     style: ElevatedButton.styleFrom(
+                                      //       primary: Color(0xff4D6658),
+                                      //       onPrimary: Colors.white,
+                                      //       textStyle: TextStyle(fontSize: 15),
+                                      //       minimumSize: Size(164, 45),
+                                      //       elevation: 10,
+                                      //     ),
+                                      //     onPressed: () {},
+                                      //     child: Text(
+                                      //       "Add Resumes (CVs)",
+                                      //       style: TextStyle(
+                                      //           fontFamily: 'Eczar',
+                                      //           fontSize: 15,
+                                      //           fontWeight: FontWeight.bold),
+                                      //     )),
                                     ],
                                   ),
                                 ),

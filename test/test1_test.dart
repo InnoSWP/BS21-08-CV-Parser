@@ -11,32 +11,46 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
 
-  group('Testing group 1', () {
-    test('Mock api', () async{
-      String api = await mockAPI("text");
-      //String testApi = api;
-      expect(api, '[{"match":"research","label":"CsSkill","sentence":""},{"match":"Innopolis University - Phd","label":"ORG","sentence":"Innopolis University - Currently a Masters Degree in MSIT Software Engineering."},{"match":"English","label":"LANGUAGE","sentence":"Languages:Arabic (Native), English (Fluent), Japanese (beginner)"},{"match":"www.moofiyTv.com","label":"Links","sentence":"www.moofiyTv.com"},{"match":"muwaffaqimam@gmail.com","label":"emails","sentence":"muwaffaqimam@gmail.com"}]');
-    });
-    /*
-    test('Multiple files should be uploaded.', () async{
-      final List<PdfFile> files =
-      await getFilesBytes();
-      expect(files[0].name, "Doc1");
-    });
+ group('Testing group 1', () {
+   test('Mock api', () async{
+     print("Testing Mock api...");
+     String api = await mockAPI("text");
+     //String testApi = api;
+     bool flag = true;
+     List<String> matches = api.split('},{') as List<String>;
+     matches[0] = matches[0].substring(2, matches[0].length);
+     matches[matches.length - 1] = matches[matches.length - 1].substring(0, matches[matches.length - 1].length - 2);
+     for(int i =  0; i < matches.length; i++)
+       {
+         if(!matches[i].startsWith('"match"') || !matches[i].contains('"label"') || !matches[i].contains('"sentence"')) flag = false;
+       }
+     expect(flag, true);
+   });
+   ///TODO we are working on using integration testing to test the file picker
+   /*
+   test('Multiple files should be uploaded.', () async{
+     final List<PdfFile> files =
+     await getFilesBytes();
+     expect(files[0].name, "Doc1");
+   });
 
-     */
-    test('Load file', () {
-      String? value = load('Doc1');
-      expect(value, null);
-    });
+    */
+   test('Load file', () {
+     print("Testing loading file...");
+     String? value = load('Doc1');
+     expect(value, null);
+   });
 
-    test('Load multiple files', () {
-      HashMap value = loadAll();
-      for(int i = 0; i < value.length; i++)
-      {
-        print(value[i]);
-      }
-      expect(value, {});
-    });
-  });
+   test('Load multiple files', () {
+     print("Testing loading mulitple files...");
+     HashMap value = loadAll();
+     for(int i = 0; i < value.length; i++)
+     {
+       print(value[i]);
+     }
+     expect(value, {});
+   });
+ });
 }
+
+
