@@ -22,8 +22,6 @@ ResumeCards requestedResumeFromHomeScreen =
 List<PdfFile> newFiles = [];
 
 class ParsedInformationScreen extends StatefulWidget {
-  
-  
   static PageRouteBuilder getRoute() {
     return PageRouteBuilder(pageBuilder: (_, __, ___) {
       return ParsedInformationScreen();
@@ -46,19 +44,16 @@ class ParsedInformationScreen extends StatefulWidget {
 }
 
 class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
-  
   final searchController = TextEditingController();
 
   ResumeCards currentResume = new ResumeCards(name: "blank", parsed: true);
   List<ResumeCards> items = [];
   List<ResumeCards> showingItems = [];
-  
-
 
   bool load = true;
-  
+
   int count = 0;
-  
+
   bool informationVisible = false;
 
   void initState() {
@@ -162,9 +157,29 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
 
   List<String> LinksItems = [];
 
-  List<bool> visiblitiyValues = [false, false, false, false, false, false, false, false, false];
+  List<bool> visiblitiyValues = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
 
-  List<bool> visibilityContainers = [false, false, false, false, false, false, false, false, false];
+  List<bool> visibilityContainers = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
 
   List<double> heightValues = [52, 52, 52, 52, 52, 52, 52, 52, 52];
 
@@ -250,6 +265,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
 
               // Mid-Part
               Container(
+                // height: 1100,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -257,14 +273,13 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                       children: [
                         // Information-Section
                         Container(
-                          color: Color(0xffE8E8E8),
+                          color: Colors.white,
                           padding: EdgeInsets.fromLTRB(64, 27, 32, 36),
                           width: 0.6 * MediaQuery.of(context).size.width,
                           child: Visibility(
                             visible: informationVisible,
                             child: Column(
                               children: [
-                                                  
                                 // Top-Heading
                                 Align(
                                     // alignment: Alignment.center,
@@ -274,7 +289,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                             fontSize: 30,
                                             fontFamily: 'Eczar',
                                             fontWeight: FontWeight.w700))),
-                                                  
+
                                 // Basic-Information-Container
                                 Container(
                                   width: 900,
@@ -304,14 +319,16 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                     color: Color(0xffFBFDF7),
                                                     borderRadius:
                                                         BorderRadius.all(
-                                                            Radius.circular(10))),
+                                                            Radius.circular(
+                                                                10))),
                                                 child: Text(
                                                   personName,
                                                   style: TextStyle(
-                                                      fontFamily: 'Merriweather',
+                                                      fontFamily:
+                                                          'Merriweather',
                                                       fontSize: 24),
                                                 )),
-                                                      
+
                                             // information
                                             Row(
                                               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -322,9 +339,9 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                   width: 300,
                                                   child: Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
-                                                      
                                                       // Email-ID
                                                       Container(
                                                         child: Row(
@@ -346,24 +363,20 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                           ],
                                                         ),
                                                       ),
-                                                    
                                                     ],
                                                   ),
                                                 ),
-                                              
-                                              
-                                              
                                               ],
                                             ),
                                           ],
                                         ),
                                       ),
-                                                      
+
                                       Container(
                                         width: 12,
                                         height: 169,
                                       ),
-                                                      
+
                                       // profile-photo
                                       Container(
                                         width: 172,
@@ -372,72 +385,62 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                             color: Color(0xffF2EEE1),
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(7.0))),
-                                        child: Icon(Icons.account_circle_outlined,
-                                            size: 120, color: Color(0xff7A370B)),
+                                        child: Icon(
+                                            Icons.account_circle_outlined,
+                                            size: 120,
+                                            color: Color(0xff7A370B)),
                                       ),
                                     ],
                                   ),
                                 ),
-                                                  
+
                                 // Parsed-Information-Display Section
                                 Container(
                                   width: 900,
                                   height: 800,
                                   margin: EdgeInsets.only(top: 30),
-                                  color: Color(0xffE8E8E8),
-                                  child: Column(
-                                    children: [
-                                                      
-                                                      
-                                                      
-                                      getParsedInformationContainer("Skills"),
-                                                      
-                                      getParsedInformationContainer(
-                                          "Organizations"),
-                                                      
-                                      getParsedInformationContainer("Languages"),
-                                                      
-                                      getParsedInformationContainer("Countries"),
-                                                      
-                                      getParsedInformationContainer("NORP"),
-                                                      
-                                      getParsedInformationContainer("GPE"),
-                                                      
-                                      getParsedInformationContainer("Degree"),
-                                                      
-                                      getParsedInformationContainer(
-                                          "Publications"),
-                                                      
-                                      getParsedInformationContainer("Links"),
-                                                      
-                                      Container(
-                                        height: 100,
-                                      ),
-                                                      
-                                      // Export CVs
-                                      ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Color(0xff4D6658),
-                                            onPrimary: Colors.white,
-                                            textStyle: TextStyle(fontSize: 16),
-                                            minimumSize: Size(291, 45),
-                                            elevation: 10,
-                                          ),
-                                          onPressed: () {
-                                            exportAsCSV();
-                                          },
-                                          child: Text(
-                                            "Export CV",
-                                            style: TextStyle(
-                                                fontFamily: 'Eczar',
-                                                fontSize: 15),
-                                          ))
-                                                      
-                                                      
-                                                      
-                                    ],
+                                  color: Colors.white,
+                                  child: SingleChildScrollView(
+                                    child: Wrap(
+                                      direction: Axis.vertical,
+                                      children: [
+                                        getParsedInformationContainer("Skills"),
+                                        getParsedInformationContainer(
+                                            "Organizations"),
+                                        getParsedInformationContainer(
+                                            "Languages"),
+                                        getParsedInformationContainer(
+                                            "Countries"),
+                                        getParsedInformationContainer("NORP"),
+                                        getParsedInformationContainer("GPE"),
+                                        getParsedInformationContainer("Degree"),
+                                        getParsedInformationContainer(
+                                            "Publications"),
+                                        getParsedInformationContainer("Links"),
+                                        Container(
+                                          height: 100,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                )
+                                ),
+
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Color(0xff4D6658),
+                                      onPrimary: Colors.white,
+                                      textStyle: TextStyle(fontSize: 16),
+                                      minimumSize: Size(291, 45),
+                                      elevation: 10,
+                                    ),
+                                    onPressed: () {
+                                      exportAsCSV();
+                                    },
+                                    child: Text(
+                                      "Export CV",
+                                      style: TextStyle(
+                                          fontFamily: 'Eczar', fontSize: 15),
+                                    ))
                               ],
                             ),
                           ),
@@ -447,7 +450,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                         Expanded(
                           child: Container(
                             color: Color(0xffFbFdF7),
-                            height: 1113,
+                            height: 1152,
                             width: 590,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -479,7 +482,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                     ],
                                   ),
                                 ),
-                        
+
                                 // Search Bar
                                 Align(
                                     alignment: Alignment.center,
@@ -547,7 +550,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                   ),
                                                 ),
                                               ),
-                        
+
                                               InkWell(
                                                 onTap: () {
                                                   String query =
@@ -586,7 +589,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                       }
                                                     }
                                                   }
-                        
+
                                                   setState(() {});
                                                 },
                                                 child: Icon(
@@ -596,23 +599,27 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                 ),
                                               )
                                             ]))),
-                        
+
                                 // Resumes-List-Containing-Container
-                                Container(
-                                    padding: EdgeInsets.all(16),
-                                    height: 750,
-                                    width: 600,
-                                    // color: Colors.blue,
-                                    child: SingleChildScrollView(
-                                      child: Wrap(
-                                        direction: Axis.horizontal,
-                                        children: List.generate(
-                                            showingItems.length, (index) {
-                                          return buildCard(showingItems[index]);
-                                        }),
-                                      ),
-                                    )),
-                        
+                                // Container(
+                                //     padding: EdgeInsets.all(16),
+                                //     height: 750,
+                                //     width: 600,
+                                //     // color: Colors.blue,
+                                //     child: SingleChildScrollView(
+                                //       child: Wrap(
+                                //         direction: Axis.horizontal,
+                                //         children: List.generate(
+                                //             showingItems.length, (index) {
+                                //           return buildCard(showingItems[index]);
+                                //         }),
+                                //       ),
+                                //     )),
+
+                                Align(
+                                    alignment: Alignment.center,
+                                    child: resumeList()),
+
                                 // Bottom-Buttons
                                 Container(
                                   child: Row(
@@ -821,7 +828,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
         width: 800,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
+          color: Colors.blueGrey,
         ),
         child: SingleChildScrollView(
             // crossAxisAlignment: CrossAxisAlignment.start,
@@ -852,6 +859,11 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                 // print(currentResume.jsonList[i]["label"]);
                               }
                             }
+
+                            // After removing the item from the resume, 
+                            // the current list in container which is used
+                            // to display the result needs to be reset.
+                            // Can be cleared, and the resume can be parsed from the modified JSON.
 
                             currentList.clear();
                             items[i].parsingData();
@@ -888,6 +900,12 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
             return items[i].publicationsItems;
           case 'Links':
             return items[i].linksItems;
+          case "GPE":
+            return items[i].gpeItems;
+          case "Degree":
+            return items[i].degreeItems;
+          case "NORP":
+            return items[i].norpItems;
           default:
             return items[i].skillItems;
         }
@@ -922,10 +940,16 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
         return 2;
       case 'Countries':
         return 3;
-      case 'Publications':
+      case 'NORP':
         return 4;
-      case 'Links':
+      case 'GPE':
         return 5;
+      case "Degree":
+        return 6;
+      case "Publications":
+        return 7;
+      case "Links":
+        return 8;
       default:
         return 0;
     }
@@ -1009,7 +1033,6 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
 
   void exportAsCSV() {
     for (int i = 0; i < items.length; i++) {
-
       if (items[i].name == currentResume.name) {
         List<List<dynamic>> rows = [];
 
@@ -1017,38 +1040,59 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
         String line = "";
 
         line += "Skills, ";
-        for (int i = 0; i < items[i].skillItems.length; i++) {
-          line += items[i].skillItems[i] + ", ";
+        for (int j = 0; j < items[i].skillItems.length; j++) {
+          line += items[i].skillItems[j] + ", ";
         }
         line += "\n";
 
         line += "Organizations, ";
-        for (int i = 0; i < items[i].organizationItems.length; i++) {
-          line += items[i].organizationItems[i] + ", ";
+        for (int j = 0; j < items[i].organizationItems.length; j++) {
+          line += items[i].organizationItems[j] + ", ";
         }
         line += "\n";
 
         line += "Languages, ";
-        for (int i = 0; i < items[i].languagesItems.length; i++) {
-          line += items[i].languagesItems[i] + ", ";
+        for (int j = 0; j < items[i].languagesItems.length; j++) {
+          line += items[i].languagesItems[j] + ", ";
         }
         line += "\n";
 
         line += "Countries, ";
-        for (int i = 0; i < items[i].countriesItems.length; i++) {
-          line += items[i].countriesItems[i] + ", ";
+        for (int j = 0; j < items[i].countriesItems.length; j++) {
+          line += items[i].countriesItems[j] + ", ";
+        }
+        line += "\n";
+
+        
+        line += "NORP, ";
+        for (int j = 0; j < items[i].norpItems.length; j++) {
+          line += items[i].norpItems[j] + ", ";
+        }
+        line += "\n";
+
+        
+        line += "GPE, ";
+        for (int j = 0; j < items[i].gpeItems.length; j++) {
+          line += items[i].gpeItems[j] + ", ";
+        }
+        line += "\n";
+
+        
+        line += "Degree, ";
+        for (int j = 0; j < items[i].degreeItems.length; j++) {
+          line += items[i].degreeItems[j] + ", ";
         }
         line += "\n";
 
         line += "Publications, ";
-        for (int i = 0; i < items[i].publicationsItems.length; i++) {
-          line += items[i].publicationsItems[i] + ", ";
+        for (int j = 0; j < items[i].publicationsItems.length; j++) {
+          line += items[i].publicationsItems[j] + ", ";
         }
         line += "\n";
 
         line += "Links, ";
-        for (int i = 0; i < items[i].linksItems.length; i++) {
-          line += items[i].linksItems[i] + ", ";
+        for (int j = 0; j < items[i].linksItems.length; j++) {
+          line += items[i].linksItems[j] + ", ";
         }
         line += "\n";
 
@@ -1083,5 +1127,34 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
       ..setAttribute("download", name)
       ..click();
   }
+
+  Widget resumeList() {
+    if (showingItems.length == 0) {
+      return Container(
+          height: 500,
+          width: 600,
+          child: Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(Icons.manage_search, size: 60),
+                Text("Search matches no result."),
+              ]));
+    }
+    return Container(
+        padding: EdgeInsets.all(16),
+        height: 750,
+        width: 600,
+        // color: Colors.blue,
+        child: SingleChildScrollView(
+          child: Wrap(
+            direction: Axis.horizontal,
+            children: List.generate(showingItems.length, (index) {
+              return buildCard(showingItems[index]);
+            }),
+          ),
+        ));
+  }
+
 
 }

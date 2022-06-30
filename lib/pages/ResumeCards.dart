@@ -30,6 +30,15 @@ class ResumeCards {
   List<String> degreeItems = [];
 
   void parsingData() {
+    skillItems.clear();
+    organizationItems.clear();
+    languagesItems.clear();
+    countriesItems.clear();
+    publicationsItems.clear();
+    linksItems.clear();
+    norpItems.clear();
+    gpeItems.clear();
+    degreeItems.clear();
     for(int i = 0; i < jsonList.length; i++) {
       switch (jsonList[i]["label"]) {
         case "CsSkill":
