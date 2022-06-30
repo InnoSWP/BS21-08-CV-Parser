@@ -827,8 +827,8 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
         height: 150,
         width: 800,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.blueGrey,
+          borderRadius: BorderRadius.circular(2),
+          color: Color(0xffF2EEE1),
         ),
         child: SingleChildScrollView(
             // crossAxisAlignment: CrossAxisAlignment.start,
