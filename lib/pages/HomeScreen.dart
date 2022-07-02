@@ -190,15 +190,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                   elevation: 10,
                                 ),
                                 onPressed: () async {
-                                  final List<PdfFile> files = await getFilesBytes();
+                                  final List<PdfFile> files =
+                                      await getFilesBytes();
 
-                                  ParsedInformationScreen.addFiles(files);
+                                  if (files.isNotEmpty) {
+                                    ParsedInformationScreen.addFiles(files);
 
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ParsedInformationScreen()));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const ParsedInformationScreen()));
+                                  }
                                 },
                                 child: const Text("Add Resumes (CVs)",
                                     style: TextStyle(
@@ -351,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 onTap: () {
                   ParsedInformationScreen.showResumes(resume);
-                  
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(

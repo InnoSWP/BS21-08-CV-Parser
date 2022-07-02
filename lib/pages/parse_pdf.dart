@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'dart:typed_data';
 import 'package:cv_parser/pages/PdfFile.dart';
 import 'package:http/http.dart' as http;
@@ -52,9 +53,31 @@ Future<String> textTojson(String text) async {
 }
 
 Future<String> mockAPI(String text) async {
-  String mockResponse =
-      '[{"match":"research","label":"CsSkill","sentence":""},{"match":"Innopolis University - Phd","label":"ORG","sentence":"Innopolis University - Currently a Masters Degree in MSIT Software Engineering."},{"match":"English","label":"LANGUAGE","sentence":"Languages:Arabic (Native), English (Fluent), Japanese (beginner)"},{"match":"www.moofiyTv.com","label":"Links","sentence":"www.moofiyTv.com"},{"match":"muwaffaqimam@gmail.com","label":"emails","sentence":"muwaffaqimam@gmail.com"}]';
-  return mockResponse;
+
+  Random random = new Random();
+  
+  int randomNumber = random.nextInt(4);
+
+  List<String> mockResponses = [];
+
+  String mockResponse1 =
+      '[{"match":"Java","label":"CsSkill","sentence":""},{"match":"C++","label":"CsSkill","sentence":""},{"match":"Indian Institue of Technology, Delhi","label":"ORG","sentence":"Bachelors of Technology from Indian Institute of Technology, Delhi"},{"match":"English","label":"LANGUAGE","sentence":"Languages:Hindi (Native), English (Fluent), Russian (beginner)"},{"match":"github.com/racoon1991","label":"Links","sentence":"github.com/racoon1991"},{"match":"racoon1991@gmail.com","label":"emails","sentence":"racoon1991@gmail.com"}]';
+
+  String mockResponse2 =
+      '[{"match":"Java","label":"CsSkill","sentence":""},{"match":"Python","label":"CsSkill","sentence":""},{"match":"Innopolis University","label":"ORG","sentence":"Bachelors of Computer Science from Innopolis University"},{"match":"English","label":"LANGUAGE","sentence":"Languages: Hindi (Native), English (Fluent), German (beginner)"},{"match":"www.thecsspace.com","label":"Links","sentence":"www.thecsspace.com"},{"match":"thecsspace@gmail.com","label":"emails","sentence":"thecsspace@gmail.com"}]';
+  
+  String mockResponse3 =
+      '[{"match":"Python","label":"CsSkill","sentence":""},{"match":"Numpy","label":"CsSkill","sentence":""},{"match":"Innopolis University","label":"ORG","sentence":"BSC from Innopolis University"},{"match":"English","label":"LANGUAGE","sentence":"Languages:Russian (Native), English (Fluent), French (beginner)"},{"match":"github.com/luciferlucy","label":"Links","sentence":"github.com/luciferlucy"},{"match":"luciferlucy@gmail.com","label":"emails","sentence":"luciferlucy@outlook.com"}]';
+
+  String mockResponse4 =
+      '[{"match":"Unity","label":"CsSkill","sentence":""},{"match":"Kinematics","label":"CsSkill","sentence":""},{"match":"MIT","label":"ORG","sentence":"MIT"},{"match":"English","label":"LANGUAGE","sentence":"Languages:English (Fluent), French (beginner)"},{"match":"github.com/csdojo","label":"Links","sentence":"github.com/csdojo"},{"match":"csdojo@gmail.com","label":"emails","sentence":"csdojo@hotmail.com"}]';
+
+  mockResponses.add(mockResponse1);
+  mockResponses.add(mockResponse2);
+  mockResponses.add(mockResponse3);
+  mockResponses.add(mockResponse4);
+  
+  return mockResponses[randomNumber];
 }
 
 Future<void> parseFile(PdfFile file) async {
@@ -73,7 +96,7 @@ Future<void> parseFile(PdfFile file) async {
   document.dispose();
 
   //Convert text to json.
-  var json = await mockAPI(text);
+  var json = await textTojson(text);
 
   //save the text to local storage
   save(fileName, json);

@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:html';
 import 'dart:io';
 import 'dart:math' as math;
@@ -55,6 +56,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
   int count = 0;
 
   bool informationVisible = false;
+  bool selectedResume = true;
 
   void initState() {
     super.initState();
@@ -62,6 +64,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
       resumeListSetter();
       newFilesAdder();
       if (requestedResumeFromHomeScreen.name != "blank") {
+        selectedResume = false;
         informationVisible = true;
         showResume(requestedResumeFromHomeScreen);
         requestedResumeFromHomeScreen =
@@ -78,7 +81,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
 
   Future<void> fileLoader() async {
     for (int i = 0; i < newFiles.length; i++) {
-      parseFile(newFiles[i]);
+      await parseFile(newFiles[i]);
 
       for (int j = 0; j < items.length; j++) {
         if (items[j].name == newFiles[i].name) {
@@ -93,26 +96,19 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
       }
 
       // newFiles.removeAt(i);
-      await Future.delayed(const Duration(seconds: 2), () {
-        setState(() {
-          // items.clear();
-          // showingItems.clear();
-          // resumeListSetter();
-          print("success");
-        });
-      });
+      setState(() {});
     }
 
-    setState(() {
-      // because of new file adder,
-      // the list contains some files which are not parsed
-      // so we will clear both the lists and setup the resumeList again.
-      // and hence we are done here.
-      items.clear();
-      showingItems.clear();
-      newFiles.clear();
-      resumeListSetter();
-    });
+    // because of new file adder,
+    // the list contains some files which are not parsed
+    // so we will clear both the lists and setup the resumeList again.
+    // and hence we are done here.
+    items.clear();
+    showingItems.clear();
+    newFiles.clear();
+    await resumeListSetter();
+
+    setState(() {});
   }
 
   Future<void> newFilesAdder() async {
@@ -157,6 +153,8 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
 
   List<String> LinksItems = [];
 
+  List<AnimatedContainer> parsedInformationDecks = [];
+
   List<bool> visiblitiyValues = [
     false,
     false,
@@ -184,6 +182,18 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
   List<double> heightValues = [52, 52, 52, 52, 52, 52, 52, 52, 52];
 
   List<double> angleValues = [270, 270, 270, 270, 270, 270, 270, 270, 270];
+
+  List<bool> animatedContainerVisibility = [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -271,177 +281,202 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                   children: [
                     Row(
                       children: [
+                        // Select Resume to View Information Icon
+                        Visibility(
+                          visible: selectedResume,
+                          child: Container(
+                              height: 1000,
+                              width: 900,
+                              alignment: Alignment.center,
+                              child: Column(children: [
+                                Icon(Icons.ads_click, size: 100),
+                                Text("Select a resume to view information.",
+                                    style: TextStyle(
+                                      fontFamily: "Montserrat",
+                                      fontSize: 32,
+                                    )),
+                              ])),
+                        ),
+
                         // Information-Section
-                        Container(
-                          color: Colors.white,
-                          padding: EdgeInsets.fromLTRB(64, 27, 32, 36),
-                          width: 0.6 * MediaQuery.of(context).size.width,
-                          child: Visibility(
-                            visible: informationVisible,
-                            child: Column(
-                              children: [
-                                // Top-Heading
-                                Align(
-                                    // alignment: Alignment.center,
-                                    child: Text("Parsed Information",
-                                        style: TextStyle(
-                                            color: Color(0xff7A370B),
-                                            fontSize: 30,
-                                            fontFamily: 'Eczar',
-                                            fontWeight: FontWeight.w700))),
+                        Visibility(
+                          visible: informationVisible,
+                          child: Container(
+                            color: Colors.white,
+                            padding: EdgeInsets.fromLTRB(64, 27, 32, 36),
+                            width: 0.6 * MediaQuery.of(context).size.width,
+                            child: Visibility(
+                              visible: informationVisible,
+                              child: Column(
+                                children: [
+                                  // Top-Heading
+                                  Align(
+                                      // alignment: Alignment.center,
+                                      child: Text("Parsed Information",
+                                          style: TextStyle(
+                                              color: Color(0xff7A370B),
+                                              fontSize: 30,
+                                              fontFamily: 'Eczar',
+                                              fontWeight: FontWeight.w700))),
 
-                                // Basic-Information-Container
-                                Container(
-                                  width: 900,
-                                  height: 169,
-                                  child: Row(
-                                    children: [
-                                      // top-basic-information
-                                      Container(
-                                        padding:
-                                            EdgeInsets.fromLTRB(21, 8, 22, 21),
-                                        width: 621,
-                                        height: 169,
-                                        decoration: BoxDecoration(
-                                            color: Color(0xffF2EEE1),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10))),
-                                        child: Column(
-                                          children: [
-                                            // Name of Person
-                                            Container(
-                                                padding: EdgeInsets.fromLTRB(
-                                                    12, 7, 84, 8),
-                                                margin: EdgeInsets.all(5),
-                                                width: 575,
-                                                height: 43,
-                                                decoration: BoxDecoration(
-                                                    color: Color(0xffFBFDF7),
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                10))),
-                                                child: Text(
-                                                  personName,
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                          'Merriweather',
-                                                      fontSize: 24),
-                                                )),
-
-                                            // information
-                                            Row(
-                                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                // Information 1
-                                                Container(
-                                                  margin: EdgeInsets.all(10),
-                                                  width: 300,
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      // Email-ID
-                                                      Container(
-                                                        child: Row(
-                                                          children: [
-                                                            Icon(
-                                                              Icons
-                                                                  .alternate_email,
-                                                              size: 22,
-                                                            ),
-                                                            Text("  "),
-                                                            Text(
-                                                              personEmail,
-                                                              style: TextStyle(
-                                                                fontFamily:
-                                                                    'Merriweather',
-                                                                fontSize: 16,
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-
-                                      Container(
-                                        width: 12,
-                                        height: 169,
-                                      ),
-
-                                      // profile-photo
-                                      Container(
-                                        width: 172,
-                                        height: 169,
-                                        decoration: BoxDecoration(
-                                            color: Color(0xffF2EEE1),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(7.0))),
-                                        child: Icon(
-                                            Icons.account_circle_outlined,
-                                            size: 120,
-                                            color: Color(0xff7A370B)),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-
-                                // Parsed-Information-Display Section
-                                Container(
-                                  width: 900,
-                                  height: 800,
-                                  margin: EdgeInsets.only(top: 30),
-                                  color: Colors.white,
-                                  child: SingleChildScrollView(
-                                    child: Wrap(
-                                      direction: Axis.vertical,
+                                  // Basic-Information-Container
+                                  Container(
+                                    width: 900,
+                                    height: 169,
+                                    child: Row(
                                       children: [
-                                        getParsedInformationContainer("Skills"),
-                                        getParsedInformationContainer(
-                                            "Organizations"),
-                                        getParsedInformationContainer(
-                                            "Languages"),
-                                        getParsedInformationContainer(
-                                            "Countries"),
-                                        getParsedInformationContainer("NORP"),
-                                        getParsedInformationContainer("GPE"),
-                                        getParsedInformationContainer("Degree"),
-                                        getParsedInformationContainer(
-                                            "Publications"),
-                                        getParsedInformationContainer("Links"),
+                                        // top-basic-information
                                         Container(
-                                          height: 100,
+                                          padding: EdgeInsets.fromLTRB(
+                                              21, 8, 22, 21),
+                                          width: 621,
+                                          height: 169,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xffF2EEE1),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10))),
+                                          child: Column(
+                                            children: [
+                                              // Name of Person
+                                              Container(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      12, 7, 84, 8),
+                                                  margin: EdgeInsets.all(5),
+                                                  width: 575,
+                                                  height: 43,
+                                                  decoration: BoxDecoration(
+                                                      color: Color(0xffFBFDF7),
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  10))),
+                                                  child: Text(
+                                                    personName,
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            'Merriweather',
+                                                        fontSize: 24),
+                                                  )),
+
+                                              // information
+                                              Row(
+                                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  // Information 1
+                                                  Container(
+                                                    margin: EdgeInsets.all(10),
+                                                    width: 300,
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        // Email-ID
+                                                        Container(
+                                                          child: Row(
+                                                            children: [
+                                                              Icon(
+                                                                Icons
+                                                                    .alternate_email,
+                                                                size: 22,
+                                                              ),
+                                                              Text("  "),
+                                                              Text(
+                                                                personEmail,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontFamily:
+                                                                      'Merriweather',
+                                                                  fontSize: 16,
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        Container(
+                                          width: 12,
+                                          height: 169,
+                                        ),
+
+                                        // profile-photo
+                                        Container(
+                                          width: 172,
+                                          height: 169,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xffF2EEE1),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(7.0))),
+                                          child: Icon(
+                                              Icons.account_circle_outlined,
+                                              size: 120,
+                                              color: Color(0xff7A370B)),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ),
 
-                                ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Color(0xff4D6658),
-                                      onPrimary: Colors.white,
-                                      textStyle: TextStyle(fontSize: 16),
-                                      minimumSize: Size(291, 45),
-                                      elevation: 10,
+                                  // Parsed-Information-Display Section
+                                  Container(
+                                    width: 900,
+                                    height: 800,
+                                    margin: EdgeInsets.only(top: 30),
+                                    color: Colors.white,
+                                    child: SingleChildScrollView(
+                                      child: Wrap(
+                                        direction: Axis.vertical,
+                                        children: [
+                                          getParsedInformationContainer(
+                                              "Skills"),
+                                          getParsedInformationContainer(
+                                              "Organizations"),
+                                          getParsedInformationContainer(
+                                              "Languages"),
+                                          getParsedInformationContainer(
+                                              "Countries"),
+                                          getParsedInformationContainer("NORP"),
+                                          getParsedInformationContainer("GPE"),
+                                          getParsedInformationContainer(
+                                              "Degree"),
+                                          getParsedInformationContainer(
+                                              "Publications"),
+                                          getParsedInformationContainer(
+                                              "Links"),
+                                        ],
+                                      ),
                                     ),
-                                    onPressed: () {
-                                      exportAsCSV();
-                                    },
-                                    child: Text(
-                                      "Export CV",
-                                      style: TextStyle(
-                                          fontFamily: 'Eczar', fontSize: 15),
-                                    ))
-                              ],
+                                  ),
+
+                                  Container(
+                                    height: 100,
+                                  ),
+
+                                  ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Color(0xff4D6658),
+                                        onPrimary: Colors.white,
+                                        textStyle: TextStyle(fontSize: 16),
+                                        minimumSize: Size(291, 45),
+                                        elevation: 10,
+                                      ),
+                                      onPressed: () {
+                                        exportAsCSV();
+                                      },
+                                      child: Text(
+                                        "Export CV",
+                                        style: TextStyle(
+                                            fontFamily: 'Eczar', fontSize: 15),
+                                      ))
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -450,7 +485,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                         Expanded(
                           child: Container(
                             color: Color(0xffFbFdF7),
-                            height: 1152,
+                            height: 1252,
                             width: 590,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -654,7 +689,18 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                             minimumSize: Size(164, 45),
                                             elevation: 10,
                                           ),
-                                          onPressed: () {},
+                                          onPressed: () async {
+                                            final List<PdfFile> files = await getFilesBytes();
+                                            
+                                            newFiles.addAll(files);
+
+                                            setState(() {
+
+                                              newFilesAdder();
+                                              fileLoader();
+
+                                            });
+                                          },
                                           child: Text(
                                             "Add Resumes (CVs)",
                                             style: TextStyle(
@@ -665,6 +711,9 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                     ],
                                   ),
                                 ),
+                              
+                              
+                              
                               ],
                             ),
                           ),
@@ -723,10 +772,8 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                     items.remove(resume);
                     showingItems.remove(resume);
 
-                    Future.delayed(const Duration(milliseconds: 0), () {
-                      setState(() {
-                        // resumeListSetter();
-                      });
+                    setState(() {
+                      // resumeListSetter();
                     });
                   },
                   child: Icon(Icons.close, size: 20, color: Color(0xff864921))),
@@ -752,6 +799,69 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
       );
 
   void showResume(ResumeCards resume) {
+    if (resume.skillItems.isEmpty) {
+      animatedContainerVisibility[0] = false;
+    }
+    else {
+      animatedContainerVisibility[0] = true;
+    }
+
+    if (resume.organizationItems.isEmpty) {
+      animatedContainerVisibility[1] = false;
+    }
+    else {
+      animatedContainerVisibility[1] = true;
+    }
+
+    if (resume.languagesItems.isEmpty) {
+      animatedContainerVisibility[2] = false;
+    }
+    else {
+      animatedContainerVisibility[2] = true;
+    }
+
+    if (resume.countriesItems.isEmpty) {
+      animatedContainerVisibility[3] = false;
+    }
+    else {
+      animatedContainerVisibility[3] = true;
+    }
+
+    if (resume.norpItems.isEmpty) {
+      animatedContainerVisibility[4] = false;
+    }
+    else {
+      animatedContainerVisibility[4] = true;
+    }
+
+    if (resume.gpeItems.isEmpty) {
+      animatedContainerVisibility[5] = false;
+    }
+    else {
+      animatedContainerVisibility[5] = true;
+    }
+
+    if (resume.degreeItems.isEmpty) {
+      animatedContainerVisibility[6] = false;
+    }
+    else {
+      animatedContainerVisibility[6] = true;
+    }
+
+    if (resume.publicationsItems.isEmpty) {
+      animatedContainerVisibility[7] = false;
+    }
+    else {
+      animatedContainerVisibility[7] = true;
+    }
+
+    if (resume.linksItems.isEmpty) {
+      animatedContainerVisibility[8] = false;
+    }
+    else {
+      animatedContainerVisibility[8] = true;
+    }
+
     currentResume = resume;
     personName = resume.name;
     personEmail = resume.email;
@@ -820,15 +930,16 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
           ),
         ]),
       );
-
+  TextEditingController reportValue = new TextEditingController();
+  String report = '';
   Widget buildExpandedContainer(List<String> currentList, String name) =>
       Container(
         padding: EdgeInsets.fromLTRB(33, 15, 120, 10),
         height: 150,
         width: 800,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.blueGrey,
+          borderRadius: BorderRadius.circular(2),
+          color: Color(0xffF2EEE1),
         ),
         child: SingleChildScrollView(
             // crossAxisAlignment: CrossAxisAlignment.start,
@@ -847,6 +958,37 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                   ),
                   InkWell(
                       onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Wrong information!'),
+                            content: const Text(
+                                'Please, report here what is wrong with the data listed.'),
+                            actions: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    16.0, 0.0, 16.0, 8.0),
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                      hintText: 'Enter your report'),
+                                  controller: reportValue,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  report =
+                                      '{"match": "research","label": "CsSkill","sentence": """reason": "' +
+                                          reportValue.text +
+                                          '"}';
+                                  //final body = jsonDecode(report);
+                                  // print(report + '\n');
+                                  Navigator.pop(context, 'Submit');
+                                },
+                                child: const Text('Submit'),
+                              ),
+                            ],
+                          ),
+                        );
                         for (int i = 0; i < items.length; i++) {
                           if (items[i].name == currentResume.name) {
                             for (int j = 0; j < items[i].jsonList.length; j++) {
@@ -860,7 +1002,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                               }
                             }
 
-                            // After removing the item from the resume, 
+                            // After removing the item from the resume,
                             // the current list in container which is used
                             // to display the result needs to be reset.
                             // Can be cleared, and the resume can be parsed from the modified JSON.
@@ -914,19 +1056,22 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
     return currentResume.skillItems;
   }
 
-  Widget getParsedInformationContainer(String name) => AnimatedContainer(
-        width: 800,
-        height: heightValues[getIndexByName(name)],
-        margin: EdgeInsets.all(10),
-        duration: Duration(seconds: 0),
-        child: Column(
-          children: [
-            buildDeck(name),
-            Visibility(
-              child: buildExpandedContainer(getCurrentList(name), name),
-              visible: visiblitiyValues[getIndexByName(name)],
-            ),
-          ],
+  Widget getParsedInformationContainer(String name) => Visibility(
+        visible: animatedContainerVisibility[getIndexByName(name)],
+        child: AnimatedContainer(
+          width: 800,
+          height: heightValues[getIndexByName(name)],
+          margin: EdgeInsets.all(10),
+          duration: Duration(seconds: 0),
+          child: Column(
+            children: [
+              buildDeck(name),
+              Visibility(
+                child: buildExpandedContainer(getCurrentList(name), name),
+                visible: visiblitiyValues[getIndexByName(name)],
+              ),
+            ],
+          ),
         ),
       );
 
@@ -968,6 +1113,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
             color: Color(0xff4D6658),
           ),
           onTap: () {
+            selectedResume = false;
             informationVisible = true;
             showResume(resume);
           },
@@ -986,38 +1132,38 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
       String line = "";
 
       line += "Skills, ";
-      for (int i = 0; i < showingItems[i].skillItems.length; i++) {
-        line += showingItems[i].skillItems[i] + ", ";
+      for (int j = 0; j < showingItems[i].skillItems.length; j++) {
+        line += showingItems[i].skillItems[j] + ", ";
       }
       line += "\n";
 
       line += "Organizations, ";
-      for (int i = 0; i < showingItems[i].organizationItems.length; i++) {
-        line += showingItems[i].organizationItems[i] + ", ";
+      for (int j = 0; j < showingItems[i].organizationItems.length; j++) {
+        line += showingItems[i].organizationItems[j] + ", ";
       }
       line += "\n";
 
       line += "Languages, ";
-      for (int i = 0; i < showingItems[i].languagesItems.length; i++) {
-        line += showingItems[i].languagesItems[i] + ", ";
+      for (int j = 0; j < showingItems[i].languagesItems.length; j++) {
+        line += showingItems[i].languagesItems[j] + ", ";
       }
       line += "\n";
 
       line += "Countries, ";
-      for (int i = 0; i < showingItems[i].countriesItems.length; i++) {
-        line += showingItems[i].countriesItems[i] + ", ";
+      for (int j = 0; j < showingItems[i].countriesItems.length; j++) {
+        line += showingItems[i].countriesItems[j] + ", ";
       }
       line += "\n";
 
       line += "Publications, ";
-      for (int i = 0; i < showingItems[i].publicationsItems.length; i++) {
-        line += showingItems[i].publicationsItems[i] + ", ";
+      for (int j = 0; j < showingItems[i].publicationsItems.length; j++) {
+        line += showingItems[i].publicationsItems[j] + ", ";
       }
       line += "\n";
 
       line += "Links, ";
-      for (int i = 0; i < showingItems[i].linksItems.length; i++) {
-        line += showingItems[i].linksItems[i] + ", ";
+      for (int j = 0; j < showingItems[i].linksItems.length; j++) {
+        line += showingItems[i].linksItems[j] + ", ";
       }
       line += "\n";
 
@@ -1063,21 +1209,18 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
         }
         line += "\n";
 
-        
         line += "NORP, ";
         for (int j = 0; j < items[i].norpItems.length; j++) {
           line += items[i].norpItems[j] + ", ";
         }
         line += "\n";
 
-        
         line += "GPE, ";
         for (int j = 0; j < items[i].gpeItems.length; j++) {
           line += items[i].gpeItems[j] + ", ";
         }
         line += "\n";
 
-        
         line += "Degree, ";
         for (int j = 0; j < items[i].degreeItems.length; j++) {
           line += items[i].degreeItems[j] + ", ";
@@ -1097,8 +1240,6 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
         line += "\n";
 
         // String csv = const ListToCsvConverter().convert(rows);
-
-        print(line);
 
         // save(items[i].name.toString() + " as CSV", line);
 
@@ -1155,6 +1296,4 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
           ),
         ));
   }
-
-
 }
