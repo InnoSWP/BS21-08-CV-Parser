@@ -64,6 +64,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
       resumeListSetter();
       newFilesAdder();
       if (requestedResumeFromHomeScreen.name != "blank") {
+        selectedResume = false;
         informationVisible = true;
         showResume(requestedResumeFromHomeScreen);
         requestedResumeFromHomeScreen =
@@ -80,7 +81,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
 
   Future<void> fileLoader() async {
     for (int i = 0; i < newFiles.length; i++) {
-      parseFile(newFiles[i]);
+      await parseFile(newFiles[i]);
 
       for (int j = 0; j < items.length; j++) {
         if (items[j].name == newFiles[i].name) {
@@ -95,22 +96,19 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
       }
 
       // newFiles.removeAt(i);
-      await Future.delayed(const Duration(seconds: 0), () {
-        setState(() {
-        });
-      });
+      setState(() {});
     }
 
-    setState(() {
-      // because of new file adder,
-      // the list contains some files which are not parsed
-      // so we will clear both the lists and setup the resumeList again.
-      // and hence we are done here.
-      items.clear();
-      showingItems.clear();
-      newFiles.clear();
-      resumeListSetter();
-    });
+    // because of new file adder,
+    // the list contains some files which are not parsed
+    // so we will clear both the lists and setup the resumeList again.
+    // and hence we are done here.
+    items.clear();
+    showingItems.clear();
+    newFiles.clear();
+    await resumeListSetter();
+
+    setState(() {});
   }
 
   Future<void> newFilesAdder() async {
@@ -184,6 +182,18 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
   List<double> heightValues = [52, 52, 52, 52, 52, 52, 52, 52, 52];
 
   List<double> angleValues = [270, 270, 270, 270, 270, 270, 270, 270, 270];
+
+  List<bool> animatedContainerVisibility = [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -271,19 +281,20 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                   children: [
                     Row(
                       children: [
-
+                        // Select Resume to View Information Icon
                         Visibility(
                           visible: selectedResume,
                           child: Container(
-                            height: 1000,
-                            width: 900,
+                              height: 1000,
+                              width: 900,
                               alignment: Alignment.center,
                               child: Column(children: [
                                 Icon(Icons.ads_click, size: 100),
-                                Text("Select a resume to view information.", style: TextStyle(
-                                  fontFamily: "Montserrat",
-                                  fontSize: 32,
-                                )),
+                                Text("Select a resume to view information.",
+                                    style: TextStyle(
+                                      fontFamily: "Montserrat",
+                                      fontSize: 32,
+                                    )),
                               ])),
                         ),
 
@@ -307,7 +318,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                               fontSize: 30,
                                               fontFamily: 'Eczar',
                                               fontWeight: FontWeight.w700))),
-                        
+
                                   // Basic-Information-Container
                                   Container(
                                     width: 900,
@@ -316,8 +327,8 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                       children: [
                                         // top-basic-information
                                         Container(
-                                          padding:
-                                              EdgeInsets.fromLTRB(21, 8, 22, 21),
+                                          padding: EdgeInsets.fromLTRB(
+                                              21, 8, 22, 21),
                                           width: 621,
                                           height: 169,
                                           decoration: BoxDecoration(
@@ -346,7 +357,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                             'Merriweather',
                                                         fontSize: 24),
                                                   )),
-                        
+
                                               // information
                                               Row(
                                                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -372,7 +383,8 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                               Text("  "),
                                                               Text(
                                                                 personEmail,
-                                                                style: TextStyle(
+                                                                style:
+                                                                    TextStyle(
                                                                   fontFamily:
                                                                       'Merriweather',
                                                                   fontSize: 16,
@@ -389,12 +401,12 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                             ],
                                           ),
                                         ),
-                        
+
                                         Container(
                                           width: 12,
                                           height: 169,
                                         ),
-                        
+
                                         // profile-photo
                                         Container(
                                           width: 172,
@@ -411,7 +423,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                       ],
                                     ),
                                   ),
-                        
+
                                   // Parsed-Information-Display Section
                                   Container(
                                     width: 900,
@@ -422,24 +434,31 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                       child: Wrap(
                                         direction: Axis.vertical,
                                         children: [
-                                          getParsedInformationContainer("Skills"),
-                                          getParsedInformationContainer("Organizations"),
-                                          getParsedInformationContainer("Languages"),
-                                          getParsedInformationContainer("Countries"),
+                                          getParsedInformationContainer(
+                                              "Skills"),
+                                          getParsedInformationContainer(
+                                              "Organizations"),
+                                          getParsedInformationContainer(
+                                              "Languages"),
+                                          getParsedInformationContainer(
+                                              "Countries"),
                                           getParsedInformationContainer("NORP"),
                                           getParsedInformationContainer("GPE"),
-                                          getParsedInformationContainer("Degree"),
-                                          getParsedInformationContainer("Publications"),
-                                          getParsedInformationContainer("Links"),
+                                          getParsedInformationContainer(
+                                              "Degree"),
+                                          getParsedInformationContainer(
+                                              "Publications"),
+                                          getParsedInformationContainer(
+                                              "Links"),
                                         ],
                                       ),
                                     ),
                                   ),
-                        
+
                                   Container(
-                                            height: 100,
-                                          ),
-                        
+                                    height: 100,
+                                  ),
+
                                   ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                         primary: Color(0xff4D6658),
@@ -662,25 +681,39 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                       SizedBox(
                                         width: 20,
                                       ),
-                                      // ElevatedButton(
-                                      //     style: ElevatedButton.styleFrom(
-                                      //       primary: Color(0xff4D6658),
-                                      //       onPrimary: Colors.white,
-                                      //       textStyle: TextStyle(fontSize: 15),
-                                      //       minimumSize: Size(164, 45),
-                                      //       elevation: 10,
-                                      //     ),
-                                      //     onPressed: () {},
-                                      //     child: Text(
-                                      //       "Add Resumes (CVs)",
-                                      //       style: TextStyle(
-                                      //           fontFamily: 'Eczar',
-                                      //           fontSize: 15,
-                                      //           fontWeight: FontWeight.bold),
-                                      //     )),
+                                      ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Color(0xff4D6658),
+                                            onPrimary: Colors.white,
+                                            textStyle: TextStyle(fontSize: 15),
+                                            minimumSize: Size(164, 45),
+                                            elevation: 10,
+                                          ),
+                                          onPressed: () async {
+                                            final List<PdfFile> files = await getFilesBytes();
+                                            
+                                            newFiles.addAll(files);
+
+                                            setState(() {
+
+                                              newFilesAdder();
+                                              fileLoader();
+
+                                            });
+                                          },
+                                          child: Text(
+                                            "Add Resumes (CVs)",
+                                            style: TextStyle(
+                                                fontFamily: 'Eczar',
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold),
+                                          )),
                                     ],
                                   ),
                                 ),
+                              
+                              
+                              
                               ],
                             ),
                           ),
@@ -739,10 +772,8 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                     items.remove(resume);
                     showingItems.remove(resume);
 
-                    Future.delayed(const Duration(milliseconds: 0), () {
-                      setState(() {
-                        // resumeListSetter();
-                      });
+                    setState(() {
+                      // resumeListSetter();
                     });
                   },
                   child: Icon(Icons.close, size: 20, color: Color(0xff864921))),
@@ -768,6 +799,69 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
       );
 
   void showResume(ResumeCards resume) {
+    if (resume.skillItems.isEmpty) {
+      animatedContainerVisibility[0] = false;
+    }
+    else {
+      animatedContainerVisibility[0] = true;
+    }
+
+    if (resume.organizationItems.isEmpty) {
+      animatedContainerVisibility[1] = false;
+    }
+    else {
+      animatedContainerVisibility[1] = true;
+    }
+
+    if (resume.languagesItems.isEmpty) {
+      animatedContainerVisibility[2] = false;
+    }
+    else {
+      animatedContainerVisibility[2] = true;
+    }
+
+    if (resume.countriesItems.isEmpty) {
+      animatedContainerVisibility[3] = false;
+    }
+    else {
+      animatedContainerVisibility[3] = true;
+    }
+
+    if (resume.norpItems.isEmpty) {
+      animatedContainerVisibility[4] = false;
+    }
+    else {
+      animatedContainerVisibility[4] = true;
+    }
+
+    if (resume.gpeItems.isEmpty) {
+      animatedContainerVisibility[5] = false;
+    }
+    else {
+      animatedContainerVisibility[5] = true;
+    }
+
+    if (resume.degreeItems.isEmpty) {
+      animatedContainerVisibility[6] = false;
+    }
+    else {
+      animatedContainerVisibility[6] = true;
+    }
+
+    if (resume.publicationsItems.isEmpty) {
+      animatedContainerVisibility[7] = false;
+    }
+    else {
+      animatedContainerVisibility[7] = true;
+    }
+
+    if (resume.linksItems.isEmpty) {
+      animatedContainerVisibility[8] = false;
+    }
+    else {
+      animatedContainerVisibility[8] = true;
+    }
+
     currentResume = resume;
     personName = resume.name;
     personEmail = resume.email;
@@ -799,7 +893,6 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
             angle: angleValues[getIndexByName(name)] * math.pi / 180,
             child: IconButton(
               onPressed: () {
-
                 int prevIndex = visiblitiyValues.indexOf(true);
                 int currentIndex = getIndexByName(name);
 
@@ -963,19 +1056,22 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
     return currentResume.skillItems;
   }
 
-  AnimatedContainer getParsedInformationContainer(String name) => AnimatedContainer(
-        width: 800,
-        height: heightValues[getIndexByName(name)],
-        margin: EdgeInsets.all(10),
-        duration: Duration(seconds: 0),
-        child: Column(
-          children: [
-            buildDeck(name),
-            Visibility(
-              child: buildExpandedContainer(getCurrentList(name), name),
-              visible: visiblitiyValues[getIndexByName(name)],
-            ),
-          ],
+  Widget getParsedInformationContainer(String name) => Visibility(
+        visible: animatedContainerVisibility[getIndexByName(name)],
+        child: AnimatedContainer(
+          width: 800,
+          height: heightValues[getIndexByName(name)],
+          margin: EdgeInsets.all(10),
+          duration: Duration(seconds: 0),
+          child: Column(
+            children: [
+              buildDeck(name),
+              Visibility(
+                child: buildExpandedContainer(getCurrentList(name), name),
+                visible: visiblitiyValues[getIndexByName(name)],
+              ),
+            ],
+          ),
         ),
       );
 
@@ -1017,7 +1113,6 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
             color: Color(0xff4D6658),
           ),
           onTap: () {
-
             selectedResume = false;
             informationVisible = true;
             showResume(resume);

@@ -96,7 +96,7 @@ Future<void> parseFile(PdfFile file) async {
   document.dispose();
 
   //Convert text to json.
-  var json = await mockAPI(text);
+  var json = await textTojson(text);
 
   //save the text to local storage
   save(fileName, json);
