@@ -1,4 +1,4 @@
-## iExtract - Resume Parser
+## CV Parser
 
 ### Project Description
 
@@ -12,6 +12,10 @@ A web application that can be used for parsing specific information from resumes
 *   Tanmay Sharma - Front-end Developer & UI/UX Researcher
 *   Roukaya Mabrouk - Front-end Developer
 *   Ahmed Soliman - Backend Developer
+
+### Live Demo  
+![Live Demo](images/live%20demo.gif)
+
 
 ### How to use (Screenshots)
 

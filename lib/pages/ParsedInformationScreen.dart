@@ -343,7 +343,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                                       12, 7, 84, 8),
                                                   margin: EdgeInsets.all(5),
                                                   width: 575,
-                                                  height: 43,
+                                                  height: 46,
                                                   decoration: BoxDecoration(
                                                       color: Color(0xffFBFDF7),
                                                       borderRadius:
@@ -471,7 +471,7 @@ class _ParsedInformationScreenState extends State<ParsedInformationScreen> {
                                         exportAsCSV();
                                       },
                                       child: Text(
-                                        "Export CV",
+                                        "Export this CV",
                                         style: TextStyle(
                                             fontFamily: 'Eczar', fontSize: 15),
                                       ))
